@@ -100,7 +100,7 @@ async def on_raw_reaction_remove(payload):
 
         if myRole != None:
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-            if member != None:
+            if member != 672901764747493397 and member != None:
                 await member.remove_roles(myRole)
 ###
 
