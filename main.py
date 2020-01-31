@@ -78,7 +78,7 @@ async def on_raw_reaction_add(payload):
 
         if myRole != None:
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-            if member != None:
+            if member != None and member != 672901764747493397:
                 await member.add_roles(myRole)
 
 @client.event
