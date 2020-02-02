@@ -8,6 +8,7 @@ import youtube_dl
 
 from discord.ext import commands
 from random import randint
+from random import choice
 
 COR = 0xF26DDC 
 TOKEN = secret.token()
@@ -133,7 +134,7 @@ class SimpleCommands(commands.Cog):
 
         ajuda.add_field(
             name="Comandos", 
-            value=">ajuda - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>diga <frase> - direi o que você me mandar\n>ping - pong!\n",
+            value=">ajuda - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>diga <frase> - direi o que você me mandar\n>filo - chame a Filo-chan para te responder uma pergunta\n>ping - pong!\n",
             inline=False)
 
         ajuda.add_field(
@@ -176,6 +177,20 @@ class SimpleCommands(commands.Cog):
         embed.set_image(url=member.avatar_url)
         await message.channel.send(mention_author, embed = embed)
 
+    @commands.command(pass_context=True)
+    async def filo(self, message):
+        args = message.message.content.strip('>filo ')
+        sup = args + 'a'
+        if sup == 'a':
+            msg = '{0.author.mention} '.format(message) + 'o que exatamente eu deveria responder? 🐤'
+        else:
+            ans = ['Sim', 'Não', 'Talvez', 'Não sei', 'Com certeza', 'Não posso afirmar', 'Não posso negar', '(Censurado pelo governo)', 'Obviamente não', 'Com toda certeza que sim', 'Para de encher o saco e vai capinar um lote, não tô aqui pra te responder', 'Concordo']
+            msg = '{0.author.mention} '.format(message) + choice(ans)
+        with open("filo.png", 'rb') as avatar:
+            filo = await message.channel.create_webhook(name='Filo-chan',avatar=avatar.read())
+        await filo.send(content=msg)
+        await filo.delete()
+
 ### ### ###
 
 @bot.event
@@ -188,17 +203,24 @@ async def on_ready():
 @bot.event
 @in_guild()
 async def on_message(message):
-    # if bot.user.mentioned_in(message) and not message.content.startswith('>') and message.author != bot.user:
-    #     if message.author.id == OWNER:
-    #         await message.channel.send('Olá, meu pai c:')
-    #     await message.channel.send('Meu prefixo é ">" u.u')
+    if bot.user.mentioned_in(message) and not message.content.startswith('>') and message.author != bot.user:
+        if message.author.id == OWNER:
+            await message.channel.send('Olá, meu pai c:')
+        await message.channel.send('Meu prefixo é ">" u.u')
         
-    # if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
-    #     await message.channel.send('TALOCO É?')
+    if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
+        await message.channel.send('TALOCO É?')
     
     if 'lindo' in message.content.lower() and not message.content.startswith('>') and message.author != bot.user:
-        bzin = await message.channel.create_webhook(name='Bezin')
-        await bzin.send(content='Eu sou lind0!')
+        with open("bezin.png", 'rb') as f:
+            bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
+        await bzin.send(content='Eu sou Iindo!')
+        await bzin.delete()
+    
+    if 'bonito' in message.content.lower() and not message.content.startswith('>') and message.author != bot.user:
+        with open("bezin.png", 'rb') as f:
+            bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
+        await bzin.send(content='Eu sou bonïto!')
         await bzin.delete()
 
     await bot.process_commands(message)
