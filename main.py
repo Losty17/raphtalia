@@ -11,10 +11,10 @@ from random import randint
 
 COR = 0xF26DDC 
 TOKEN = secret.token()
-OWNER = secret.owner()
+OWNER = 207947146371006464
 BOT = secret.bot()
 
-game = discord.Game('digite ">help"!')
+game = discord.Game('digite ">ajuda"!')
 
 songs = asyncio.Queue()
 play_next_song = asyncio.Event()
@@ -117,7 +117,7 @@ class SimpleCommands(commands.Cog):
         await message.channel.send(mention_author + ' Pong! Minha latência é de ' + ms + 'ms')
 
     @commands.command()
-    async def help(self, message):
+    async def ajuda(self, message):
         mention_author = '{0.author.mention}'.format(message)
         ajuda=discord.Embed(
             title="Ajuda! ✨", 
@@ -125,14 +125,22 @@ class SimpleCommands(commands.Cog):
             color=COR)
         ajuda.set_footer(text="Siga-me no twitter: twitter.com/KKKBini.")
 
-        ajuda.add_field(name="Comandos", value=">help - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>say <frase> - direi o que você me mandar\n>ping - pong!\n", inline=False)
+        ajuda.add_field(
+            name="Comandos", 
+            value=">ajuda - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>diga <frase> - direi o que você me mandar\n>ping - pong!\n",
+            inline=False)
 
-        ajuda.add_field(name="Música (pode haver bugs, trabalho em progresso!)", value=">join - me faz entrar no canal de voz\n>play <nome ou url da musica> - me faz tocar uma música\n>stop - me faz parar a música\n", inline=False)
+        ajuda.add_field(
+            name="Música (pode haver bugs, trabalho em progresso!)", 
+            value=">join - me faz entrar no canal de voz\n>play <nome ou url da musica> - me faz tocar uma música\n>stop - me faz parar a música\n",
+            inline=False)
         
         thumb = bot.user.avatar_url
         ajuda.set_thumbnail(url=thumb)
 
         ajuda.set_image(url='https://coverfiles.alphacoders.com/765/76564.png')
+        if message.author.id == OWNER:
+            await message.channel.send('Se esqueceu de novo? :P')
         await message.channel.send(mention_author, embed = ajuda)
 
     @commands.command()
@@ -145,9 +153,9 @@ class SimpleCommands(commands.Cog):
             await message.channel.send(mention_author + ' Coroa!')
 
     @commands.command(pass_context = True)
-    async def say(self, ctx, *args):
+    async def diga(self, ctx, *args):
         mesg = ' '.join(args)
-        if mesg == 'pindamonhangaba':
+        if mesg.lower() == 'pindamonhangaba':
             await ctx.message.channel.send('Achou que eu ia falar? bobinho')
         else:
             await ctx.message.delete()
@@ -175,8 +183,11 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     if bot.user.mentioned_in(message) and not message.content.startswith('>') and message.author != bot.user:
+        if message.author.id == OWNER:
+            await message.channel.send('Olá, meu pai c:')
         await message.channel.send('Meu prefixo é ">" u.u')
-    if 'pindamonhangaba' in message.content and not message.content.startswith('>'):
+        print(message.author.id)
+    if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
         await message.channel.send('TALOCO É?')
 
     await bot.process_commands(message)
