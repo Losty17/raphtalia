@@ -20,6 +20,12 @@ game = discord.Game('digite ">ajuda"!')
 songs = asyncio.Queue()
 play_next_song = asyncio.Event()
 
+global words
+words_file = open("words.txt", "r")
+words = words_file.readlines()
+
+words_file.close()
+
 global bot
 bot = commands.Bot(command_prefix = '>', help_command = None, case_insensitive = True, owner_id = OWNER)
 
@@ -46,12 +52,6 @@ ffmpeg_options = {
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
-
-def in_guild():
-    async def pred(ctx):
-        return ctx.guild.id == 501807001324617748
-
-    return commands.check(pred)
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
@@ -124,33 +124,6 @@ class SimpleCommands(commands.Cog):
         await message.channel.send(mention_author + ' Pong! Minha latência é de ' + ms + 'ms')
 
     @commands.command()
-    async def ajuda(self, message):
-        mention_author = '{0.author.mention}'.format(message)
-        ajuda=discord.Embed(
-            title="Ajuda! ✨", 
-            description="Olá, me chamo Raphtalia e sou um simples bot para discord feito pelo @Losty#5440!\n\nMe convide para o seu servidor! -> https://bit.ly/37RavgH", 
-            color=COR)
-        ajuda.set_footer(text="Siga-me no twitter: twitter.com/KKKBini.")
-
-        ajuda.add_field(
-            name="Comandos", 
-            value=">ajuda - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>diga <frase> - direi o que você me mandar\n>filo - chame a Filo-chan para te responder uma pergunta\n>ping - pong!\n",
-            inline=False)
-
-        ajuda.add_field(
-            name="Música (pode haver bugs, trabalho em progresso!)", 
-            value=">join - me faz entrar no canal de voz\n>play <nome ou url da musica> - me faz tocar uma música\n>stop - me faz parar a música\n",
-            inline=False)
-        
-        thumb = bot.user.avatar_url
-        ajuda.set_thumbnail(url=thumb)
-
-        ajuda.set_image(url='https://coverfiles.alphacoders.com/765/76564.png')
-        if message.author.id == OWNER:
-            await message.channel.send('Se esqueceu de novo? :P')
-        await message.channel.send(mention_author, embed = ajuda)
-
-    @commands.command()
     async def moeda(self, message):
         mention_author = '{0.author.mention}'.format(message)
         choice = randint(0,1)
@@ -191,6 +164,28 @@ class SimpleCommands(commands.Cog):
         await filo.send(content=msg)
         await filo.delete()
 
+    @commands.command(pass_context=True)
+    async def proibir(self, ctx):
+        msg = "Hoje o governo proibiu " + choice(words).lower()
+        with open("proibiu.jpg", 'rb') as avatar:
+            proibiu = await ctx.channel.create_webhook(name='ProibiuBOT',avatar=avatar.read())
+        await proibiu.send(content=msg)
+        await proibiu.delete()
+
+    @commands.command()
+    async def inverter(self, ctx, *, text: str):
+        to_reverse = text
+        await ctx.channel.send(str(to_reverse)[::-1])
+
+class DevOnly(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command()
+    async def teste(self, ctx):
+        print('Tudo ok seu delicia!')
+        await ctx.message.add_reaction('👌')
+
 ### ### ###
 
 @bot.event
@@ -200,10 +195,13 @@ async def on_ready():
         activity = game, 
         status = discord.Status.idle
         )
+
 @bot.event
-@in_guild()
 async def on_message(message):
-    if bot.user.mentioned_in(message) and not message.content.startswith('>') and message.author != bot.user:
+    if message.author == bot.user:
+        return
+
+    if bot.user.mentioned_in(message) and not message.content.startswith('>'):
         if message.author.id == OWNER:
             await message.channel.send('Olá, meu pai c:')
         await message.channel.send('Meu prefixo é ">" u.u')
@@ -211,13 +209,13 @@ async def on_message(message):
     if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
         await message.channel.send('TALOCO É?')
     
-    if 'lindo' in message.content.lower() and not message.content.startswith('>') and message.author != bot.user:
+    if 'lindo' in message.content.lower():
         with open("bezin.png", 'rb') as f:
             bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
         await bzin.send(content='Eu sou Iindo!')
         await bzin.delete()
     
-    if 'bonito' in message.content.lower() and not message.content.startswith('>') and message.author != bot.user:
+    if 'bonito' in message.content.lower():
         with open("bezin.png", 'rb') as f:
             bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
         await bzin.send(content='Eu sou bonïto!')
@@ -225,6 +223,34 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+@bot.command()
+async def ajuda(message):
+    mention_author = '{0.author.mention}'.format(message)
+    ajuda=discord.Embed(
+        title="Ajuda! ✨", 
+        description="Olá, me chamo Raphtalia e sou um simples bot para discord feito pelo @Losty#5440!\n\nMe convide para o seu servidor! -> https://bit.ly/37RavgH", 
+        color=COR)
+    ajuda.set_footer(text="Siga-me no twitter: twitter.com/KKKBini.")
+
+    ajuda.add_field(
+        name="Comandos", 
+        value=">ajuda - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>diga <frase> - direi o que você me mandar\n>filo - chame a Filo-chan para te responder uma pergunta\n>ping - pong!\n",
+        inline=False)
+
+    ajuda.add_field(
+        name="Música (pode haver bugs, trabalho em progresso!)", 
+        value=">join - me faz entrar no canal de voz\n>play <nome ou url da musica> - me faz tocar uma música\n>stop - me faz parar a música\n",
+        inline=False)
+        
+    thumb = bot.user.avatar_url
+    ajuda.set_thumbnail(url=thumb)
+
+    ajuda.set_image(url='https://coverfiles.alphacoders.com/765/76564.png')
+    if message.author.id == OWNER:
+        await message.channel.send('Se esqueceu de novo? :P')
+    await message.channel.send(mention_author, embed = ajuda)
+
 bot.add_cog(Music(bot))
 bot.add_cog(SimpleCommands(bot))
+bot.add_cog(DevOnly(bot))
 bot.run(TOKEN)
