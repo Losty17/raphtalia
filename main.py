@@ -14,7 +14,7 @@ TOKEN = secret.token()
 OWNER = secret.owner()
 BOT = secret.bot()
 
-game = discord.Game('meu prefixo é ">"')
+game = discord.Game('digite ">help"!')
 
 songs = asyncio.Queue()
 play_next_song = asyncio.Event()
@@ -94,12 +94,6 @@ class Music(commands.Cog):
 
         await ctx.voice_client.disconnect()
         await ctx.channel.send('Saindo... :c')
-
-    @commands.command()
-    async def leave(self, ctx):
-
-        await ctx.voice_client.disconnect()
-        await ctx.channel.send('Saindo... :c')
     
     @play.before_invoke
     async def ensure_voice(self, ctx):
@@ -125,11 +119,20 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def help(self, message):
         mention_author = '{0.author.mention}'.format(message)
-        ajuda = discord.Embed(
-            title = "Comandos: ",
-            color = COR,
-            description = "\n!help \n!teste \n!moeda"
-        )
+        ajuda=discord.Embed(
+            title="Ajuda! ✨", 
+            description="Olá, me chamo Raphtalia e sou um simples bot para discord feito pelo @Losty#5440!\n\nMe convide para o seu servidor! -> https://bit.ly/37RavgH", 
+            color=COR)
+        ajuda.set_footer(text="Siga-me no twitter: twitter.com/KKKBini.")
+
+        ajuda.add_field(name="Comandos", value=">help - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>say <frase> - direi o que você me mandar\n>ping - pong!\n", inline=False)
+
+        ajuda.add_field(name="Música (pode haver bugs, trabalho em progresso!)", value=">join - me faz entrar no canal de voz\n>play <nome ou url da musica> - me faz tocar uma música\n>stop - me faz parar a música\n", inline=False)
+        
+        thumb = bot.user.avatar_url
+        ajuda.set_thumbnail(url=thumb)
+
+        ajuda.set_image(url='https://coverfiles.alphacoders.com/765/76564.png')
         await message.channel.send(mention_author, embed = ajuda)
 
     @commands.command()
