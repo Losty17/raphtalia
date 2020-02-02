@@ -46,6 +46,12 @@ ffmpeg_options = {
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
+def in_guild():
+    async def pred(ctx):
+        return ctx.guild.id == 501807001324617748
+
+    return commands.check(pred)
+
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
         super().__init__(source, volume)
@@ -179,19 +185,23 @@ async def on_ready():
         activity = game, 
         status = discord.Status.idle
         )
-
 @bot.event
+@in_guild()
 async def on_message(message):
-    if bot.user.mentioned_in(message) and not message.content.startswith('>') and message.author != bot.user:
-        if message.author.id == OWNER:
-            await message.channel.send('Olá, meu pai c:')
-        await message.channel.send('Meu prefixo é ">" u.u')
-        print(message.author.id)
-    if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
-        await message.channel.send('TALOCO É?')
+    # if bot.user.mentioned_in(message) and not message.content.startswith('>') and message.author != bot.user:
+    #     if message.author.id == OWNER:
+    #         await message.channel.send('Olá, meu pai c:')
+    #     await message.channel.send('Meu prefixo é ">" u.u')
+        
+    # if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
+    #     await message.channel.send('TALOCO É?')
+    
+    if 'lindo' in message.content.lower() and not message.content.startswith('>') and message.author != bot.user:
+        bzin = await message.channel.create_webhook(name='Bezin')
+        await bzin.send(content='Eu sou lind0!')
+        await bzin.delete()
 
     await bot.process_commands(message)
-
 
 bot.add_cog(Music(bot))
 bot.add_cog(SimpleCommands(bot))
