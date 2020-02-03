@@ -10,7 +10,7 @@ from discord.ext import commands
 from random import randint
 from random import choice
 
-COR = 0xF26DDC 
+COR = 0xF26DDC
 TOKEN = secret.token()
 OWNER = 207947146371006464
 BOT = secret.bot()
@@ -83,13 +83,13 @@ class Music(commands.Cog):
     @commands.command()
     async def join(self, ctx):
         channel = ctx.author.voice.channel
-        
+
         await channel.connect()
         await ctx.channel.send('Pronta para tocar o bailão!')
 
     @commands.command()
     async def play(self, ctx, *, url):
-        
+
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
@@ -101,7 +101,7 @@ class Music(commands.Cog):
 
         await ctx.voice_client.disconnect()
         await ctx.channel.send('Saindo... :c')
-    
+
     @play.before_invoke
     async def ensure_voice(self, ctx):
         if ctx.voice_client is None:
@@ -192,7 +192,7 @@ class DevOnly(commands.Cog):
 async def on_ready():
     print('Olá mundo! Eu sou {0}'.format(bot.user))
     await bot.change_presence(
-        activity = game, 
+        activity = game,
         status = discord.Status.idle
         )
 
@@ -205,16 +205,16 @@ async def on_message(message):
         if message.author.id == OWNER:
             await message.channel.send('Olá, meu pai c:')
         await message.channel.send('Meu prefixo é ">" u.u')
-        
+
     if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
         await message.channel.send('TALOCO É?')
-    
+
     if 'lindo' in message.content.lower():
         with open("bezin.png", 'rb') as f:
             bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
         await bzin.send(content='Eu sou Iindo!')
         await bzin.delete()
-    
+
     if 'bonito' in message.content.lower():
         with open("bezin.png", 'rb') as f:
             bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
@@ -227,21 +227,21 @@ async def on_message(message):
 async def ajuda(message):
     mention_author = '{0.author.mention}'.format(message)
     ajuda=discord.Embed(
-        title="Ajuda! ✨", 
-        description="Olá, me chamo Raphtalia e sou um simples bot para discord feito pelo @Losty#5440!\n\nMe convide para o seu servidor! -> https://bit.ly/37RavgH", 
+        title="Ajuda! ✨",
+        description="Olá, me chamo Raphtalia e sou um simples bot para discord feito pelo @Losty#5440!\n\nMe convide para o seu servidor! -> https://bit.ly/37RavgH",
         color=COR)
     ajuda.set_footer(text="Siga-me no twitter: twitter.com/KKKBini.")
 
     ajuda.add_field(
-        name="Comandos", 
-        value=">ajuda - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>diga <frase> - direi o que você me mandar\n>filo - chame a Filo-chan para te responder uma pergunta\n>ping - pong!\n",
+        name="Comandos",
+        value=">ajuda - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>diga <frase> - direi o que você me mandar\n>filo - chame a Filo-chan para te responder uma pergunta\n>ping - pong!\n>proibir - Qual foi a proibição do governo de hoje?\n>inverter <texto> - inverterei o texto que me mandar",
         inline=False)
 
     ajuda.add_field(
-        name="Música (pode haver bugs, trabalho em progresso!)", 
+        name="Música (pode haver bugs, trabalho em progresso!)",
         value=">join - me faz entrar no canal de voz\n>play <nome ou url da musica> - me faz tocar uma música\n>stop - me faz parar a música\n",
         inline=False)
-        
+
     thumb = bot.user.avatar_url
     ajuda.set_thumbnail(url=thumb)
 
