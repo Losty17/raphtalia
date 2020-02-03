@@ -46,7 +46,8 @@ async def on_command_error(ctx, error):
 
 @bot.check
 async def globally_block_dms(ctx):
-    raise commands.NoPrivateMessage
+    if ctx.guild is None:
+        raise commands.NoPrivateMessage
     return ctx.guild is not None
 
 @bot.event
