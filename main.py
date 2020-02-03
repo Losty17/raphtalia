@@ -10,7 +10,7 @@ from discord.ext import commands
 from random import *
 
 try:
-    import cogs.dev
+    import cogs.admin
     import cogs.text
     import cogs.music
 
@@ -28,7 +28,7 @@ game = discord.Game('digite ">ajuda"!')
 bot = commands.Bot(command_prefix = '>', help_command = None, case_insensitive = True, owner_id = OWNER)
 
 extensions = [
-    'cogs.dev',
+    'cogs.admin',
     'cogs.music',
     'cogs.text'
 ]
@@ -127,7 +127,7 @@ async def on_ready():
 def load_modules():
     for extension in extensions:
         try:
-            print(f"Carregando módulo: {extension}")
+            print(f"Carregando módulo: {extension}...")
             bot.load_extension(extension)
         except Exception:
             print(f"Não foi possível carregar o módulo {extension}")
