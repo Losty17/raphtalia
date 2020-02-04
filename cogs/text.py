@@ -43,17 +43,18 @@ class Text(commands.Cog):
             await message.channel.send(mention_author + ' Coroa!')
 
     @commands.command(pass_context = True)
-    async def diga(self, ctx, args = None):
-
-        if args is not None:
-            mesg = args
+    async def diga(self, ctx, *args):
+        if is_empty(args):
+            await ctx.message.channel.send(f'{ctx.author.mention} o que eu deveria dizer? -.-')
+        else:
+            print(args)
+            mesg = ' '.join(args)
+            print(mesg)
             if mesg.lower() == 'pindamonhangaba':
                 await ctx.message.channel.send('Achou que eu ia falar? bobinho')
             else:
                 await ctx.message.delete()
                 await ctx.message.channel.send(mesg)
-        else:
-            await ctx.message.channel.send(f'{ctx.author.mention} o que eu deveria dizer? -.-')
 
     @commands.command(pass_context=True)
     async def avatar(self, message, member: discord.Member = None):
@@ -69,7 +70,20 @@ class Text(commands.Cog):
         if args is None:
             msg = '{0.author.mention} '.format(message) + 'o que exatamente eu deveria responder? 🐤'
         else:
-            ans = ['Sim', 'Não', 'Talvez', 'Não sei', 'Com certeza', 'Não posso afirmar', 'Não posso negar', '(Censurado pelo governo)', 'Obviamente não', 'Com toda certeza que sim', 'Para de encher o saco e vai capinar um lote, não tô aqui pra te responder', 'Concordo']
+            ans = [
+            'Sim',
+            'Não',
+            'Talvez',
+            'Não sei',
+            'Concordo',
+            'Com certeza',
+            'Obviamente não',
+            'Não posso negar',
+            'Não posso afirmar',
+            '(Censurado pelo governo)',
+            'Com toda certeza que sim',
+            'Para de encher o saco e vai capinar um lote, não tô aqui pra te responder'
+            ]
             msg = '{0.author.mention} '.format(message) + choice(ans)
         with open("./media/filo.png", 'rb') as avatar:
             filo = await message.channel.create_webhook(name='Filo-chan',avatar=avatar.read())
@@ -77,11 +91,12 @@ class Text(commands.Cog):
         await filo.delete()
 
     @commands.command(pass_context=True)
-    async def proibir(self, ctx, args = None):
-        if args is not None:
-            msg = 'Hoje o governo proibiu ' + args.lower()
-        else:
+    async def proibir(self, ctx, *args):
+        if is_empty(args):
             msg = "Hoje o governo proibiu " + choice(words).lower()
+        else:
+            proibicao = ' '.join(args)
+            msg = 'Hoje o governo proibiu ' + proibicao.lower()
         with open("./media/proibiu.jpg", 'rb') as avatar:
             proibiu = await ctx.channel.create_webhook(name='ProibiuBOT',avatar=avatar.read())
         await proibiu.send(content=msg)
