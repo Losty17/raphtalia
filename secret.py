@@ -1,5 +1,5 @@
 def token():
-    return 'NjcyOTAxNzY0NzQ3NDkzMzk3.XjnOtQ.mraw1HBe4VfBeIjopjd9osC6KQg'
+    return 'NjcyOTAxNzY0NzQ3NDkzMzk3.XjnPVQ.AdgnSyrMw7TcxcA_cDTXE2vNQdo'
 
 def owner():
     return 207947146371006464
