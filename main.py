@@ -109,7 +109,7 @@ async def ajuda(message):
 
 @bot.command()
 @commands.is_owner()
-async def list_modules(self, ctx):
+async def list_modules(ctx):
     await ctx.channel.send(f'Os modulos são: {extensions}')
 
 @bot.event
