@@ -3,3 +3,6 @@ def token():
 
 def owner():
     return 207947146371006464
+
+def teste():
+    return
