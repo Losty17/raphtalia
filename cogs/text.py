@@ -1,19 +1,8 @@
 import discord
 import time
 
-import youtube_dl
-
 from discord.ext import commands
-from random import randint
 from random import choice
-
-global words
-words_file = open("./media/words.txt", "r")
-words = words_file.readlines()
-
-words_file.close()
-
-COR = 0xF26DDC
 
 def is_empty(anything):
     if anything:
@@ -35,72 +24,21 @@ class Text(commands.Cog):
 
     @commands.command()
     async def moeda(self, message):
-        mention_author = '{0.author.mention}'.format(message)
-        choice = randint(0,1)
-        if choice == 0:
-            await message.channel.send(mention_author + ' Cara!')
-        if choice == 1:
-            await message.channel.send(mention_author + ' Coroa!')
+        coin = ['Cara!', 'Coroa!']
+        pau = choice(coin)
+        await message.channel.send(f'{message.author.mention} {pau}')
 
     @commands.command(pass_context = True)
     async def diga(self, ctx, *args):
         if is_empty(args):
             await ctx.message.channel.send(f'{ctx.author.mention} o que eu deveria dizer? -.-')
         else:
-            print(args)
             mesg = ' '.join(args)
-            print(mesg)
             if mesg.lower() == 'pindamonhangaba':
                 await ctx.message.channel.send('Achou que eu ia falar? bobinho')
             else:
                 await ctx.message.delete()
                 await ctx.message.channel.send(mesg)
-
-    @commands.command(pass_context=True)
-    async def avatar(self, message, member: discord.Member = None):
-        mention_author = '{0.author.mention}'.format(message)
-        member = message.author if not member else member
-
-        embed = discord.Embed(colour = COR)
-        embed.set_image(url=member.avatar_url)
-        await message.channel.send(mention_author, embed = embed)
-
-    @commands.command(pass_context=True)
-    async def filo(self, message, args = None):
-        if args is None:
-            msg = '{0.author.mention} '.format(message) + 'o que exatamente eu deveria responder? 🐤'
-        else:
-            ans = [
-            'Sim',
-            'Não',
-            'Talvez',
-            'Não sei',
-            'Concordo',
-            'Com certeza',
-            'Obviamente não',
-            'Não posso negar',
-            'Não posso afirmar',
-            '(Censurado pelo governo)',
-            'Com toda certeza que sim',
-            'Para de encher o saco e vai capinar um lote, não tô aqui pra te responder'
-            ]
-            msg = '{0.author.mention} '.format(message) + choice(ans)
-        with open("./media/filo.png", 'rb') as avatar:
-            filo = await message.channel.create_webhook(name='Filo-chan',avatar=avatar.read())
-        await filo.send(content=msg)
-        await filo.delete()
-
-    @commands.command(pass_context=True)
-    async def proibir(self, ctx, *args):
-        if is_empty(args):
-            msg = "Hoje o governo proibiu " + choice(words).lower()
-        else:
-            proibicao = ' '.join(args)
-            msg = 'Hoje o governo proibiu ' + proibicao.lower()
-        with open("./media/proibiu.jpg", 'rb') as avatar:
-            proibiu = await ctx.channel.create_webhook(name='ProibiuBOT',avatar=avatar.read())
-        await proibiu.send(content=msg)
-        await proibiu.delete()
 
     @commands.command()
     async def inverter(self, ctx, *, text: str = None):
@@ -117,6 +55,9 @@ class Text(commands.Cog):
         else:
             await ctx.channel.send(choice(args))
 
+    @commands.command()
+    async def some(self, ctx, left: int, right: int):
+        await ctx.send(left + right)
+
 def setup(bot):
     bot.add_cog(Text(bot))
-    print('Comandos de texto carregados')

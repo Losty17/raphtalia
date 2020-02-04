@@ -6,43 +6,37 @@ import sys
 
 import youtube_dl
 
-from discord.ext import commands
+from itertools import cycle
+from discord.ext import commands, tasks
 from random import *
 
 try:
     import cogs.admin
     import cogs.text
     import cogs.music
-
+    import cogs.webhook
+    import cogs.errorhandler
+    import cogs.messageevents
+    import cogs.images
 except ImportError as error:
     sys.exit("ERROR: Missing dependency: {0}".format(error))
+
+extensions = [
+    'cogs.admin',
+    'cogs.music',
+    'cogs.text',
+    'cogs.webhook',
+    'cogs.errorhandler',
+    'cogs.messageevents',
+    'cogs.images'
+]
 
 COR = 0xF26DDC
 TOKEN = secret.token()
 OWNER = secret.owner()
 
-global bot
-
-game = discord.Game('digite ">ajuda"!')
-
 bot = commands.Bot(command_prefix = '>', help_command = None, case_insensitive = True, owner_id = OWNER)
-
-extensions = [
-    'cogs.admin',
-    'cogs.music',
-    'cogs.text'
-]
-
-@bot.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.NoPrivateMessage):
-        await ctx.send('Desculpe, mas é necessário estar em um servidor para utilizar meus comandos.')
-    elif isinstance(error, commands.DisabledCommand):
-        await ctx.send('Este comando está desabilitado temporariamente.')
-    elif isinstance(error, commands.CheckFailure):
-        await ctx.send('Você não tem permissão para acessar este comando!')
-    elif isinstance(error, commands.CommandNotFound):
-        await ctx.send(f'Desculpe, não consegui encontrar o comando solicitado...')
+client = discord.Client
 
 @bot.check
 async def globally_block_dms(ctx):
@@ -50,79 +44,91 @@ async def globally_block_dms(ctx):
         raise commands.NoPrivateMessage
     return ctx.guild is not None
 
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
-        return
-
-    if 'bom dia' in message.content.lower():
-        await message.channel.send('<:meme:672420428702154763>')
-        await message.channel.send('<a:pepeInsane:670473893622054953>')
-
-    if bot.user.mentioned_in(message) and not message.content.startswith('>'):
-        if message.author.id == OWNER:
-            await message.channel.send('Ola denovo')
-        await message.channel.send('Meu prefixo é ">" u.u')
-
-    if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
-        await message.channel.send('TALOCO É?')
-
-    if 'lindo' in message.content.lower():
-        with open("media/bezin.png", 'rb') as f:
-            bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
-        await bzin.send(content='Eu sou Iindo!')
-        await bzin.delete()
-
-    if 'bonito' in message.content.lower():
-        with open("media/bezin.png", 'rb') as f:
-            bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
-        await bzin.send(content='Eu sou bonïto!')
-        await bzin.delete()
-
-    await bot.process_commands(message)
-
 @bot.command()
 async def ajuda(message):
     mention_author = '{0.author.mention}'.format(message)
     ajuda=discord.Embed(
-        title="Ajuda! ✨",
+        title="Ajuda! <a:blush1:592371658589732874>",
         description="Olá, me chamo Raphtalia e sou um simples bot para discord feito pelo @Losty#5440!\n\nMe convide para o seu servidor! -> https://bit.ly/37RavgH",
         color=COR)
     ajuda.set_footer(text="Siga-me no twitter: twitter.com/KKKBini.")
-
+    ajuda.add_field(name="Argumentos:", value='< > - parâmetro obrigatório.\n[ ] parâmetro opcional.', inline=False)
     ajuda.add_field(
-        name="Comandos",
-        value=">ajuda - me faz mostrar esta tela!\n>moeda - jogo uma moeda, será que cai cara ou coroa? 👀\n>avatar [@usuario] - mostro o avatar de um usuário\n>diga <frase> - direi o que você me mandar\n>filo - chame a Filo-chan para te responder uma pergunta\n>ping - pong!\n>proibir - Qual foi a proibição do governo de hoje?\n>inverter <texto> - inverterei o texto que me mandar",
+        name="Comandos!",
+        value='''
+        >ajuda - me faz mostrar esta tela!
+        >ping - pong!
+        >moeda - jogo uma moeda, será que cai cara ou coroa? 👀
+        >diga <frase> - direi o que você me mandar
+        >filo <pergunta> - chame a Filo-chan para te responder uma pergunta
+        >proibir [palavra] - Qual foi a proibição do governo de hoje?
+        >inverter <texto> - inverterei o texto que me mandar
+        >some <número> <número> - somarei dois números
+        >escolha <opções> - escolherei dentre as opções que mandar
+        ''',
         inline=False)
 
     ajuda.add_field(
         name="Música (pode haver bugs, trabalho em progresso!)",
-        value=">join - me faz entrar no canal de voz\n>play <nome ou url da musica> - me faz tocar uma música\n>stop - me faz parar a música\n",
+        value='''
+        >join - me faz entrar no canal de voz
+        >play <nome ou url da musica> - me faz tocar uma música
+        >stop - me faz parar a música\n
+        ''',
         inline=False)
+    ajuda.add_field(
+        name="Comandos de Imagens!",
+        value='''
+        >avatar [@usuario] - mostro o avatar de um usuário
+        ''',
+        inline=False
+    )
 
     thumb = bot.user.avatar_url
     ajuda.set_thumbnail(url=thumb)
 
     ajuda.set_image(url='https://coverfiles.alphacoders.com/765/76564.png')
-    await message.channel.send('Se esqueceu de novo? :P')
     await message.channel.send(mention_author, embed = ajuda)
     if message.author.id == OWNER:
         owner = discord.Embed(
             title='Comandos de Desenvolvedor: ',
-            description='>listemojis - lista os emojis do servidor atual\n>teste - testa se tudo está ok',
+            description='''
+            >listemojis - lista os emojis do servidor atual
+            >teste - testa se tudo está ok
+            >load - carrega um módulo
+            >unload - descarrega um módulo
+            >reload - recarrega um módulo
+            >list_modules - lista os módulos
+            >eval - testar código
+            ''',
             color=COR
         )
         await message.channel.send(embed = owner)
     else:
         return
 
+@bot.command()
+@commands.is_owner()
+async def list_modules(self, ctx):
+    await ctx.channel.send(f'Os modulos são: {extensions}')
+
 @bot.event
 async def on_ready():
     print(f'\nOlá mundo! Eu sou {bot.user}')
-    await bot.change_presence(
-        activity = game,
-        status = discord.Status.idle
-        )
+    change_presence_task.start()
+
+statuses = [
+    'Minecraft | >ajuda',
+    'League of Legends | >ajuda',
+    'Simulador de Dormir | >ajuda',
+    'Como cozinhar um humano | >ajuda'
+]
+
+@tasks.loop(seconds=120)
+async def change_presence_task():
+    status = choice(statuses)
+    game = discord.Game(status)
+    await bot.change_presence(status=discord.Status.idle, activity=game)
 
 def load_modules():
     for extension in extensions:
@@ -134,7 +140,7 @@ def load_modules():
 
 if __name__ == '__main__':
     load_modules()
-    # bot.loop.create_task(change_presence_task())
+    #bot.loop.create_task(change_presence_task())
     try:
         bot.run(TOKEN)
     except KeyError:
