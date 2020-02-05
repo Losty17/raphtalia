@@ -3,6 +3,7 @@ import time
 
 from discord.ext import commands
 from random import choice
+from random import randint
 
 def is_empty(anything):
     if anything:
@@ -59,5 +60,13 @@ class Text(commands.Cog):
     async def some(self, ctx, left: int, right: int):
         await ctx.send(left + right)
 
+    @commands.command()
+    async def role(self, ctx, *args):
+        if is_empty(args):
+            await ctx.send('Qual deveria ser o número para rolar?')
+        else:
+            dice = ''.join(args)
+            roll = randint(1, int(dice))
+            await ctx.send(f'{ctx.author.mention} {roll}!')
 def setup(bot):
     bot.add_cog(Text(bot))

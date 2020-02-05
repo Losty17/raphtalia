@@ -6,7 +6,6 @@ import sys
 
 import youtube_dl
 
-from itertools import cycle
 from discord.ext import commands, tasks
 from random import *
 
@@ -18,6 +17,7 @@ try:
     import cogs.errorhandler
     import cogs.messageevents
     import cogs.images
+    import cogs.imgur
 except ImportError as error:
     sys.exit("ERROR: Missing dependency: {0}".format(error))
 
@@ -28,7 +28,8 @@ extensions = [
     'cogs.webhook',
     'cogs.errorhandler',
     'cogs.messageevents',
-    'cogs.images'
+    'cogs.images',
+    'cogs.imgur'
 ]
 
 COR = 0xF26DDC
@@ -80,6 +81,11 @@ async def ajuda(message):
         name="Comandos de Imagens!",
         value='''
         >avatar [@usuario] - mostro o avatar de um usuário
+        >imgur [pesquisa] - pesquiso uma imagem no imgur, deixei em branco para uma aleatória.
+        >jojo - isso é uma referência?
+        >jojomeme - envio o melhor shitpost sobre jojo
+        >meme - envio um meme de baixa qualidade aleatório
+        >gato - cansado do seu dia? Vou te enviar um gato fofo para alegrar a vida!
         ''',
         inline=False
     )
@@ -115,7 +121,6 @@ async def list_modules(ctx):
 @bot.event
 async def on_ready():
     print(f'\nOlá mundo! Eu sou {bot.user}')
-    change_presence_task.start()
 
 statuses = [
     'Minecraft | >ajuda',
@@ -140,7 +145,7 @@ def load_modules():
 
 if __name__ == '__main__':
     load_modules()
-    #bot.loop.create_task(change_presence_task())
+    change_presence_task.start()
     try:
         bot.run(TOKEN)
     except KeyError:
