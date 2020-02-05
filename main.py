@@ -121,6 +121,7 @@ async def list_modules(ctx):
 @bot.event
 async def on_ready():
     print(f'\nOlá mundo! Eu sou {bot.user}')
+    change_presence_task.start()
 
 statuses = [
     'Minecraft | >ajuda',
@@ -133,7 +134,7 @@ statuses = [
 async def change_presence_task():
     status = choice(statuses)
     game = discord.Game(status)
-    await bot.change_presence(status=discord.Status.idle, activity=game)
+    await bot.change_presence(activity=game, status=discord.Status.idle)
 
 def load_modules():
     for extension in extensions:
@@ -145,7 +146,7 @@ def load_modules():
 
 if __name__ == '__main__':
     load_modules()
-    change_presence_task.start()
+
     try:
         bot.run(TOKEN)
     except KeyError:
