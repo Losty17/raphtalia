@@ -3,3 +3,4 @@ asyncio
 pynacl
 youtube_dl
 ffmpeg
+imgurpython
