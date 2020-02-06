@@ -13,6 +13,8 @@ class DiscordDisco(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        if not discord.opus.is_loaded():
+            discord.opus.load_opus('libopus.so')
 
     @commands.command(pass_contect=True, aliases=['j'])
     async def join(self, ctx):
