@@ -13,7 +13,7 @@ class Cog(commands.Cog):
         if message.author == self.bot.user:
             return
 
-        if 'oi' in message.content.lower():
+        if 'dança' in message.content.lower():
             await message.channel.send('<a:conga:528246551773184000><a:conga:528246551773184000>')
 
         if '<@!672901764747493397>' in message.content:

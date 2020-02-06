@@ -20,7 +20,7 @@ class Webhook(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=['8ball'])
     async def filo(self, message, args = None):
         if args is None:
             msg = f'{message.author.mention} o que exatamente eu deveria responder? 🐤'

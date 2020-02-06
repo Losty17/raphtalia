@@ -16,7 +16,9 @@ class Error(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.send('Você não tem permissão para acessar este comando!')
         elif isinstance(error, commands.CommandNotFound):
-            await ctx.send(f'Desculpe, não consegui encontrar o comando solicitado...')
+            await ctx.send('Desculpe, não consegui encontrar o comando solicitado...')
+        elif isinstance(error, commands.errors.CommandInvokeError):
+            await ctx.send(f'Ops, acabei encontrando um erro!\n(Ignore o que vier à seguir) <@!207947146371006464>```{error}```')
 
 def setup(bot):
     bot.add_cog(Error(bot))

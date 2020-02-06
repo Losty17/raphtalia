@@ -35,7 +35,7 @@ class DevOnly(commands.Cog):
         await ctx.message.add_reaction('👌')
 
     @commands.command()
-    async def listemojis(self, ctx):
+    async def list_emojis(self, ctx):
         print(ctx.guild.name + ' emojis:\n')
         for emoji in ctx.guild.emojis:
             print(str(emoji.id) + ' | ' + emoji.name)
