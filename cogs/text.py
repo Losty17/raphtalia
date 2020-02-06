@@ -101,8 +101,8 @@ class Text(commands.Cog):
             name="Música (pode haver bugs, trabalho em progresso!)",
             value='''
             >join - me faz entrar no canal de voz
-            >play <nome ou url da musica> - me faz tocar uma música
-            >queue <nome ou url da musica> - adiciona uma uma música à fila
+            >play <"nome entre aspas" ou url da música> - me faz tocar uma música
+            >queue <"nome entre aspas" ou url da musica> - adiciona uma uma música à fila
             >skip - pula uma música
             >pause - pausa a música atual
             >resume - retoma a música atual
