@@ -26,7 +26,7 @@ class Cog(commands.Cog):
             await message.channel.send(choice(respostas))
 
         if '<@!207947146371006464>' in message.content:
-            await message.channel.send('Certamente ele está ocupado agora.')
+            await message.channel.send('Talvez ele esteja ocupado agora. Ou não.')
 
         if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
             await message.channel.send('TALOCO É?')

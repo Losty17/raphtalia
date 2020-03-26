@@ -1,9 +1,9 @@
-import discord
-import ast
+import discord, os, ast
+from dotenv import load_dotenv
 from discord.ext import commands
-from secret import owner
 
-OWNER = owner()
+load_dotenv()
+OWNER = int(os.getenv('BOT_OWNER'))
 
 def insert_returns(body):
     # insert return stmt if the last expression is a expression statement
@@ -31,19 +31,18 @@ class DevOnly(commands.Cog):
 
     @commands.command()
     async def teste(self, ctx):
-        print('Tudo ok seu delicia! u.u')
+        print('Tudo ok! u.u')
         await ctx.message.add_reaction('👌')
 
     @commands.command()
-    async def list_emojis(self, ctx):
-        print(ctx.guild.name + ' emojis:\n')
+    async def emojis(self, ctx):
+        await ctx.send(f'{ctx.guild.name}\'s emojis:\n')
+
         for emoji in ctx.guild.emojis:
-            print(str(emoji.id) + ' | ' + emoji.name)
-        await ctx.channel.send('os emojis já estão no console')
+            await ctx.send(f'{emoji.name} | {emoji.id}')
 
     @commands.command(hidden=True)
     async def load(self, ctx, *, module):
-        """Loads a module."""
         try:
             self.bot.load_extension(module)
         except commands.ExtensionError as e:
@@ -53,7 +52,6 @@ class DevOnly(commands.Cog):
 
     @commands.command(hidden=True)
     async def unload(self, ctx, *, module):
-        """Unloads a module."""
         try:
             self.bot.unload_extension(module)
         except commands.ExtensionError as e:
@@ -63,7 +61,6 @@ class DevOnly(commands.Cog):
 
     @commands.group(name='reload', hidden=True)
     async def reload(self, ctx, *, module):
-        """Reloads a module."""
         try:
             self.bot.reload_extension(module)
         except commands.ExtensionError as e:
@@ -102,3 +99,7 @@ class DevOnly(commands.Cog):
 
 def setup(bot):
     bot.add_cog(DevOnly(bot))
+
+if __name__ == "__main__":
+    print(os.getenv('BOT_OWNER'))
+    print(int(OWNER))

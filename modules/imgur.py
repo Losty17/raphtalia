@@ -1,12 +1,12 @@
-import discord
-import time
-import secret
-import random
+import discord, time, random, os
 
 from imgurpython import ImgurClient
 from discord.ext import commands
+from dotenv import load_dotenv
 
-imgurclient = ImgurClient(secret.imgurid(), secret.imgursecret())
+load_dotenv()
+
+imgurclient = ImgurClient(os.getenv('IMGUR_TOKEN'), os.getenv('IMGUR_SECRET'))
 
 COR = 0xF26DDC
 
