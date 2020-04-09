@@ -51,21 +51,5 @@ class Imgur(commands.Cog):
         img = items[rand].link
         await ctx.send(img)
 
-    @commands.command(aliases=['cat'])
-    async def gato(self, ctx):
-        rand = random.randint(0, 59)  # 60 results generated per page
-        items = imgurclient.subreddit_gallery(subreddit='cats', sort='time', window='week', page=0)
-        img = items[rand].link
-        await ctx.send(img)
-
-
-    @commands.command(pass_context=True)
-    async def avatar(self, ctx, member: discord.Member = None):
-        if member is None:
-            member = ctx.author
-        embed = discord.Embed(colour = COR)
-        embed.set_image(url=member.avatar_url)
-        await ctx.channel.send(f'{ctx.author.mention}', embed = embed)
-
 def setup(bot):
     bot.add_cog(Imgur(bot))

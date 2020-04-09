@@ -60,20 +60,40 @@ class Text(commands.Cog):
 
     @commands.command(aliases=['add'])
     async def some(self, ctx, left: int, right: int):
-        await ctx.send(left + right)
+        try:
+            await ctx.send(left + right)
+        except:
+            await ctx.send('Não consegui efetuar, tente novamente')
 
     @commands.command(aliases=['roll','dice','rolldice'])
     async def role(self, ctx, *args):
         if is_empty(args):
-            await ctx.send('Qual deveria ser o número para rolar?')
+            return await ctx.send('Qual deveria ser o número para rolar?')
+        roll = ''.join(args)
+        if 'd' in roll:
+            try:
+                dice, faces = roll.split('d')
+                nums_str = []
+                nums_int = []
+                for i in range(int(dice)):
+                    result = randint(1, int(faces))
+                    nums_int.append(result)
+                    nums_str.append(str(result))
+                final_result = sum(nums_int)
+                partial = ' + '.join(nums_str)
+                await ctx.send(partial + ' = ' + str(final_result))
+            except:
+                await ctx.send('Não consegui efetuar a operação, tente novamente')
         else:
-            dice = ''.join(args)
-            roll = randint(1, int(dice))
-            await ctx.send(f'{ctx.author.mention} {roll}!')
-
-
-
-
+            try:
+                dice = randint(1, int(roll))
+                await ctx.send(dice)
+            except:
+                await ctx.send('Não consegui efetuar a operação, tente novamente')
+    
+    @commands.command(aliases=['autor'])
+    async def author(self, ctx):
+        await ctx.send('Siga meu criador nas redes sociais!\n- https://twitter.com/KKKBini\n- https://discord.gg/df7XWzt\n- https://anilist.co/user/losty17')
     @commands.command(aliases=['help'])
     async def ajuda(self, message):
         mention_author = '{0.author.mention}'.format(message)
@@ -148,3 +168,6 @@ class Text(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Text(bot))
+
+if __name__ == "__main__":
+    pass

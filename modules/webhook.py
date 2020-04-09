@@ -1,11 +1,9 @@
-import discord
-import time
+import discord, time, os
 
 from discord.ext import commands
 from random import choice
 
-global words
-words_file = open("./media/words.txt", "r")
+words_file = open(os.path.join('media', 'words.txt'), "r")
 words = words_file.readlines()
 
 words_file.close()
@@ -39,8 +37,8 @@ class Webhook(commands.Cog):
             'Com toda certeza que sim',
             'Para de encher o saco e vai capinar um lote, não tô aqui pra te responder'
             ]
-            msg = '{0.author.mention} '.format(message) + choice(ans)
-        with open("./media/filo.png", 'rb') as avatar:
+            msg = choice(ans)
+        with open(os.path.join("media", "filo.png"), 'rb') as avatar:
             filo = await message.channel.create_webhook(name='Filo-chan',avatar=avatar.read())
         await filo.send(content=msg)
         await filo.delete()
@@ -60,13 +58,17 @@ class Webhook(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if 'lindo' in message.content.lower():
-            with open("media/bezin.png", 'rb') as f:
+            if not message.guild.id == 501807001324617748:
+                return
+            with open(os.path.join("media", "bezin.png"), 'rb') as f:
                 bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
             await bzin.send(content='Eu sou Iindo!')
             await bzin.delete()
 
         if 'bonito' in message.content.lower():
-            with open("media/bezin.png", 'rb') as f:
+            if not message.guild.id == 501807001324617748:
+                return
+            with open(os.path.join("media", "bezin.png"), 'rb') as f:
                 bzin = await message.channel.create_webhook(name='Bezin',avatar=f.read())
             await bzin.send(content='Eu sou bonïto!')
             await bzin.delete()

@@ -16,7 +16,7 @@ class Cog(commands.Cog):
         if 'dança' in message.content.lower():
             await message.channel.send('<a:conga:528246551773184000><a:conga:528246551773184000>')
 
-        if '<@!672901764747493397>' in message.content:
+        if '<@!675010654939381785>' in message.content:
             respostas = [
             'Fico pensando por que você está marcando um bot...',
             'Gostou do meu nome, é?',
@@ -28,7 +28,7 @@ class Cog(commands.Cog):
         if '<@!207947146371006464>' in message.content:
             await message.channel.send('Talvez ele esteja ocupado agora. Ou não.')
 
-        if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('>'):
+        if 'pindamonhangaba' in message.content.lower() and not message.content.startswith('.'):
             await message.channel.send('TALOCO É?')
 
 def setup(bot):

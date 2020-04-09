@@ -42,7 +42,11 @@ class DevOnly(commands.Cog):
             await ctx.send(f'{emoji.name} | {emoji.id}')
 
     @commands.command(hidden=True)
-    async def load(self, ctx, *, module):
+    async def load(self, ctx, *, module: str = None):
+        if module is None:
+            return await ctx.send('Módulo inválido')
+        if not 'modules' in module:
+            module = f'modules.{module}'
         try:
             self.bot.load_extension(module)
         except commands.ExtensionError as e:
@@ -51,7 +55,11 @@ class DevOnly(commands.Cog):
             await ctx.send(f'{module} foi carregado com sucesso')
 
     @commands.command(hidden=True)
-    async def unload(self, ctx, *, module):
+    async def unload(self, ctx, *, module: str = None):
+        if module is None:
+            return await ctx.send('Módulo inválido')
+        if not 'modules' in module:
+            module = f'modules.{module}'
         try:
             self.bot.unload_extension(module)
         except commands.ExtensionError as e:
@@ -60,7 +68,11 @@ class DevOnly(commands.Cog):
             await ctx.send(f'{module} foi descarregado com sucesso')
 
     @commands.group(name='reload', hidden=True)
-    async def reload(self, ctx, *, module):
+    async def reload(self, ctx, *, module: str = None):
+        if module is None:
+            return await ctx.send('Módulo inválido')
+        if not 'modules' in module:
+            module = f'modules.{module}'
         try:
             self.bot.reload_extension(module)
         except commands.ExtensionError as e:
@@ -96,6 +108,12 @@ class DevOnly(commands.Cog):
 
         result = (await eval(f"{fn_name}()", env))
         await ctx.send(result)
+
+    @commands.command()
+    async def chdata(self, ctx):
+        await ctx.send('Channel data:')
+        await ctx.send(ctx.channel.id)
+        await ctx.send(ctx.channel.name)
 
 def setup(bot):
     bot.add_cog(DevOnly(bot))
