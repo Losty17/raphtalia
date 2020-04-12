@@ -115,6 +115,14 @@ class DevOnly(commands.Cog):
         await ctx.send(ctx.channel.id)
         await ctx.send(ctx.channel.name)
 
+    @commands.command()
+    async def roledata(self, ctx):
+        await ctx.send('Server roles:')
+        for role in ctx.guild.roles:
+            if role.name == '@everyone':
+                continue
+            await ctx.send(f'{role.name} | {role.id}')
+        
 def setup(bot):
     bot.add_cog(DevOnly(bot))
 

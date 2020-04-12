@@ -5,8 +5,6 @@ from os import getenv, path
 from dotenv import load_dotenv
 from time import sleep
 
-load_dotenv()
-
 try:
     from modules import *
 except ImportError as error:
@@ -21,8 +19,11 @@ extensions = [
     'modules.imgur',
     'modules.adm',
     'modules.images',
-    'modules.nsfw'
+    'modules.nsfw',
+    'modules.music'
 ]
+
+load_dotenv()
 
 COR = 0xF26DDC
 
@@ -108,7 +109,7 @@ async def on_ready():
     print(f'\nOlá mundo! Eu sou {bot.user}')
     try:
         change_presence_task.start()
-        change_avatar.start()
+        #change_avatar.start()
     except:
         print('Não foi possível carregar as tarefas de segundo plano')
 

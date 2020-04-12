@@ -70,30 +70,37 @@ class Text(commands.Cog):
         if is_empty(args):
             return await ctx.send('Qual deveria ser o número para rolar?')
         roll = ''.join(args)
-        if 'd' in roll:
-            try:
-                dice, faces = roll.split('d')
-                nums_str = []
-                nums_int = []
-                for i in range(int(dice)):
-                    result = randint(1, int(faces))
-                    nums_int.append(result)
-                    nums_str.append(str(result))
-                final_result = sum(nums_int)
-                partial = ' + '.join(nums_str)
-                await ctx.send(partial + ' = ' + str(final_result))
-            except:
-                await ctx.send('Não consegui efetuar a operação, tente novamente')
-        else:
-            try:
-                dice = randint(1, int(roll))
-                await ctx.send(dice)
-            except:
-                await ctx.send('Não consegui efetuar a operação, tente novamente')
+        
+        async with ctx.typing():
+            if 'd' in roll:
+                try:
+                    dice, faces = roll.split('d')
+                    nums_str = []
+                    nums_int = []
+                    for i in range(int(dice)):
+                        result = randint(1, int(faces))
+                        nums_int.append(result)
+                        nums_str.append(str(result))
+                    final_result = sum(nums_int)
+                    partial = ' + '.join(nums_str)
+                    await ctx.send('Rolando...')
+                    time.sleep(2)
+                    await ctx.send(f'{ctx.author.mention}, `{partial}` = `{str(final_result)}` 🎲')
+                except:
+                    await ctx.send('Não consegui efetuar a operação, tente novamente')
+            else:
+                try:
+                    await ctx.send('Rolando...')
+                    time.sleep(2)
+                    dice = randint(1, int(roll))
+                    await ctx.send(f'{ctx.author.mention}, `{dice}` 🎲')
+                except:
+                    await ctx.send('Não consegui efetuar a operação, tente novamente')
     
     @commands.command(aliases=['autor'])
     async def author(self, ctx):
         await ctx.send('Siga meu criador nas redes sociais!\n- https://twitter.com/KKKBini\n- https://discord.gg/df7XWzt\n- https://anilist.co/user/losty17')
+    
     @commands.command(aliases=['help'])
     async def ajuda(self, message):
         mention_author = '{0.author.mention}'.format(message)
@@ -165,6 +172,10 @@ class Text(commands.Cog):
             await message.channel.send(embed = owner)
         else:
             return
+
+    @commands.command()
+    async def lal(self, ctx):
+        await ctx.send('LAL')
 
 def setup(bot):
     bot.add_cog(Text(bot))
