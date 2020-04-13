@@ -167,7 +167,7 @@ class MusicPlayer:
             self.current = source
 
             self._guild.voice_client.play(source, after=lambda _: self.bot.loop.call_soon_threadsafe(self.next.set))
-            self.np = await self._channel.send(f'**Now Playing:** `{source.title}` requested by '
+            self.np = await self._channel.send(f'**Tocando agora:** `{source.title}` solicitada por '
                                                f'`{source.requester}`')
             await self.next.wait()
 
@@ -376,11 +376,11 @@ class Music(commands.Cog):
         if not player.current:
             return await ctx.send('Não estou tocando nada!')
 
-        try:
-            # Remove our previous now_playing message.
-            await player.np.delete()
-        except discord.HTTPException:
-            pass
+        # try:
+        #     # Remove our previous now_playing message.
+        #     await player.np.delete()
+        # except discord.HTTPException:
+        #     pass
 
         player.np = await ctx.send(f'**Tocando agora:** `{vc.source.title}` '
                                    f'selecionado por `{vc.source.requester}`')
@@ -395,6 +395,7 @@ class Music(commands.Cog):
             The volume to set the player to in percentage. This must be between 1 and 100.
         """
         vc = ctx.voice_client
+        vc.source.volume = 10
 
         if not vc or not vc.is_connected():
             return await ctx.send('Não estou conectada à um canal de voz!', delete_after=20)
