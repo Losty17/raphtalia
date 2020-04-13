@@ -236,7 +236,7 @@ class Music(commands.Cog):
 
         return player
 
-    @commands.command(name='connect', aliases=['join'])
+    @commands.command(name='connect', aliases=['join', 'j'])
     async def connect_(self, ctx, *, channel: discord.VoiceChannel=None):
         """Connect to voice.
 
@@ -252,7 +252,7 @@ class Music(commands.Cog):
             try:
                 channel = ctx.author.voice.channel
             except AttributeError:
-                raise InvalidVoiceChannel('No channel to join. Please either specify a valid channel or join one.')
+                raise InvalidVoiceChannel('Não há canal para se juntar. Especifique um canal ou se junte à um.')
 
         vc = ctx.voice_client
 
@@ -269,9 +269,10 @@ class Music(commands.Cog):
             except asyncio.TimeoutError:
                 raise VoiceConnectionError(f'Connecting to channel: <{channel}> timed out.')
 
-        await ctx.send(f'Connected to: **{channel}**', delete_after=20)
+        await ctx.send(f'Conectada ao canal **{channel}**', delete_after=30)
+        await ctx.message.add_reaction('👌')
 
-    @commands.command(name='play', aliases=['sing'])
+    @commands.command(name='play', aliases=['sing', 'p'])
     async def play_(self, ctx, *, search: str):
         """Request a song and add it to the queue.
 
@@ -304,12 +305,13 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_playing():
-            return await ctx.send('I am not currently playing anything!', delete_after=20)
+            return await ctx.send('Não estou tocando nada!', delete_after=20)
         elif vc.is_paused():
             return
 
         vc.pause()
-        await ctx.send(f'**`{ctx.author}`**: Paused the song!')
+        await ctx.send(f'**`{ctx.author}`** pausou a música!')
+        await ctx.message.add_reaction('⏸️')
 
     @commands.command(name='resume')
     async def resume_(self, ctx):
@@ -317,20 +319,21 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently playing anything!', delete_after=20)
+            return await ctx.send('Não estou tocando nada!', delete_after=20)
         elif not vc.is_paused():
             return
 
         vc.resume()
-        await ctx.send(f'**`{ctx.author}`**: Resumed the song!')
+        await ctx.send(f'**`{ctx.author}`** retomou a musica!')
+        await ctx.message.add_reaction('▶️')
 
-    @commands.command(name='skip')
+    @commands.command(name='skip', aliases=['s'])
     async def skip_(self, ctx):
         """Skip the song."""
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently playing anything!', delete_after=20)
+            return await ctx.send('Não estou tocando nada!', delete_after=20)
 
         if vc.is_paused():
             pass
@@ -338,7 +341,8 @@ class Music(commands.Cog):
             return
 
         vc.stop()
-        await ctx.send(f'**`{ctx.author}`**: Skipped the song!')
+        await ctx.send(f'**`{ctx.author}`** pulou a música!')
+        await ctx.message.add_reaction('⏩')
 
     @commands.command(name='queue', aliases=['q', 'playlist'])
     async def queue_info(self, ctx):
@@ -346,17 +350,17 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently connected to voice!', delete_after=20)
+            return await ctx.send('Não estou conectada à um canal de voz!', delete_after=20)
 
         player = self.get_player(ctx)
         if player.queue.empty():
-            return await ctx.send('There are currently no more queued songs.')
+            return await ctx.send('Não há mais músicas na fila.')
 
         # Grab up to 5 entries from the queue...
         upcoming = list(itertools.islice(player.queue._queue, 0, 5))
 
         fmt = '\n'.join(f'**`{_["title"]}`**' for _ in upcoming)
-        embed = discord.Embed(title=f'Upcoming - Next {len(upcoming)}', description=fmt)
+        embed = discord.Embed(title=f'Tocando à seguir - {len(upcoming)} música', description=fmt)
 
         await ctx.send(embed=embed)
 
@@ -366,11 +370,11 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently connected to voice!', delete_after=20)
+            return await ctx.send('Não estou conectada à um canal de voz!', delete_after=20)
 
         player = self.get_player(ctx)
         if not player.current:
-            return await ctx.send('I am not currently playing anything!')
+            return await ctx.send('Não estou tocando nada!')
 
         try:
             # Remove our previous now_playing message.
@@ -378,8 +382,8 @@ class Music(commands.Cog):
         except discord.HTTPException:
             pass
 
-        player.np = await ctx.send(f'**Now Playing:** `{vc.source.title}` '
-                                   f'requested by `{vc.source.requester}`')
+        player.np = await ctx.send(f'**Tocando agora:** `{vc.source.title}` '
+                                   f'selecionado por `{vc.source.requester}`')
 
     @commands.command(name='volume', aliases=['vol'])
     async def change_volume(self, ctx, *, vol: float):
@@ -393,10 +397,10 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently connected to voice!', delete_after=20)
+            return await ctx.send('Não estou conectada à um canal de voz!', delete_after=20)
 
         if not 0 < vol < 101:
-            return await ctx.send('Please enter a value between 1 and 100.')
+            return await ctx.send('Por favor entre com um numero entre 0 e 100.', delete_after=30)
 
         player = self.get_player(ctx)
 
@@ -404,7 +408,7 @@ class Music(commands.Cog):
             vc.source.volume = vol / 100
 
         player.volume = vol / 100
-        await ctx.send(f'**`{ctx.author}`**: Set the volume to **{vol}%**')
+        await ctx.send(f'**`{ctx.author}`** definiu o volume para **{vol}%**')
 
     @commands.command(name='stop')
     async def stop_(self, ctx):
@@ -416,10 +420,10 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently playing anything!', delete_after=20)
+            return await ctx.send('Eu não estou tocando nada agora!', delete_after=20)
 
         await self.cleanup(ctx.guild)
-
+        await ctx.message.add_reaction('⏹')
 
 def setup(bot):
     bot.add_cog(Music(bot))

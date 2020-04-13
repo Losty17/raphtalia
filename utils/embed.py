@@ -1,4 +1,5 @@
 from discord import Embed
+from nekos import img
 COR = 0xF26DDC
 
 def embedajuda(membro):
@@ -21,7 +22,7 @@ def embedwelcome(member, bot, prefix):
         color=COR)
     welcomeembed.add_field(
         name="<:raphNhom:674648257321893940> Precisa de ajuda?", 
-        value='Use o comando /ajuda para acessar meu painel de ajuda!', 
+        value=f'Use o comando `{prefix}ajuda` para acessar meu painel de ajuda!', 
         inline=True)
     welcomeembed.add_field(
         name="<:raphOh:674648256608731176> Siga meu criador nas redes sociais!", 
@@ -35,3 +36,9 @@ def embedwelcome(member, bot, prefix):
     welcomeembed.set_author(name=f'{bot.user}', icon_url=bot.user.avatar_url)
     #welcomeembed.set_footer(text=f'A {member.guild.name} agora possui {member.guild.size}')
     return welcomeembed
+
+def neko_img_text(image, title='', title2=""):
+    emb = Embed(title=f'{title} {title2}', colour=0xF26DDC)
+    emb.set_image(url=img(image))
+    emb.set_footer(text=f'Busca feita com o termo: "{image}"')
+    return emb
