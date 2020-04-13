@@ -50,19 +50,19 @@ class Images(commands.Cog):
         embed.set_image(url=nekos.img('ngif'))
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['ganso'])
     async def goose(self, ctx):
         embed = discord.Embed(title=f'{nekos.textcat()}', colour=COR)
         embed.set_image(url=nekos.img('goose'))
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['dog', 'cão', 'cachorro'])
     async def woof(self, ctx):
         embed = discord.Embed(title=f'{nekos.textcat()}', colour=COR)
         embed.set_image(url=nekos.img('woof'))
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['tapa'])
     async def slap(self, ctx, member: discord.Member = None):
         if member is None:
             member = ctx.author
@@ -70,7 +70,7 @@ class Images(commands.Cog):
         embed.set_image(url=nekos.img('slap'))
         await ctx.send(embed=embed)
     
-    @commands.command()
+    @commands.command(aliases=['abraçar'])
     async def hug(self, ctx, member: discord.Member = None):
         if member is None:
             member = ctx.author
@@ -78,7 +78,7 @@ class Images(commands.Cog):
         embed.set_image(url=nekos.img('hug'))
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['carinho'])
     async def cuddle(self, ctx, member: discord.Member = None):
         if member is None:
             member = ctx.author
@@ -86,7 +86,7 @@ class Images(commands.Cog):
         embed.set_image(url=nekos.img('cuddle'))
         await ctx.send(embed=embed)
     
-    @commands.command()
+    @commands.command(aliases=['acariciar'])
     async def pat(self, ctx, member: discord.Member = None):
         if member is None:
             member = ctx.author
@@ -94,7 +94,7 @@ class Images(commands.Cog):
         embed.set_image(url=nekos.img('pat'))
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['cutucar'])
     async def poke(self, ctx, member: discord.Member = None):
         if member is None:
             member = ctx.author
@@ -102,7 +102,7 @@ class Images(commands.Cog):
         embed.set_image(url=nekos.img('poke'))
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['idiota'])
     async def baka(self, ctx, member: discord.Member = None):
         if member is None:
             member = ctx.author
@@ -110,7 +110,7 @@ class Images(commands.Cog):
         embed.set_image(url=nekos.img('baka'))
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['beijar'])
     async def kiss(self, ctx, member: discord.Member = None):
         if member is None:
             member = ctx.author
@@ -118,7 +118,7 @@ class Images(commands.Cog):
         embed.set_image(url=nekos.img('kiss'))
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['alimentar'])
     async def feed(self, ctx, member: discord.Member = None):
         if member is None:
             member = ctx.author

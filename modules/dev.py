@@ -1,4 +1,4 @@
-import discord, os, ast
+import discord, os, ast, asyncio
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -123,6 +123,27 @@ class DevOnly(commands.Cog):
                 continue
             await ctx.send(f'{role.name} | {role.id}')
         
+    @commands.command()
+    async def sleeptest(self, ctx):
+        await ctx.send('teste')
+        await asyncio.sleep(5)
+        await ctx.send('teste2')
+    
+    @commands.command()
+    async def hookdata(self, ctx):
+        h = await ctx.channel.webhooks()
+        whooks = []
+        for wh in h:
+            whooks.append(wh.name)
+        print(whooks)
+    
+    @commands.command()
+    async def teste3(self, ctx):
+        asdas = ctx.author.roles
+        print(asdas)
+        if "teste" in ctx.author.roles:
+            print('teste')
+
 def setup(bot):
     bot.add_cog(DevOnly(bot))
 

@@ -1,21 +1,20 @@
 import discord
 from discord.ext import commands
-from time import sleep
+from asyncio import sleep
 
 class Cog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=['clean'])
+    @commands.command(aliases=['clean', 'limpar'])
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount : int = None):
         if amount == None or amount < 5 or amount > 100:
             return await ctx.send('Sintaxe: `clear [valor de 5 a 100]`')
         await ctx.channel.purge(limit=amount)
-        sleep(.5)
         await ctx.send(f'Chat limpo por {ctx.author.mention} <:raphNhom:674648257321893940>')
 
-    @commands.command()
+    @commands.command(aliases=['expulsar'])
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member : discord.Member = None, *, reason='_algum motivo..._'):
         if member == None:
@@ -23,7 +22,7 @@ class Cog(commands.Cog):
         await member.kick(reason=reason)
         await ctx.send(f'{ctx.author.mention} expulsou {member.mention} por {reason}')
 
-    @commands.command()
+    @commands.command(aliases=['banir'])
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member : discord.Member = None, *, reason='_algum motivo..._'):
         if member == None:
@@ -31,7 +30,7 @@ class Cog(commands.Cog):
         await member.ban(reason=reason)
         await ctx.send(f'{ctx.author.mention} baniu {member.mention} por {reason}')
 
-    @commands.command(aliases=['pardon'])
+    @commands.command(aliases=['pardon', 'desbanir', 'perdoar'])
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, *, member = None):
         if member == None:
@@ -46,38 +45,49 @@ class Cog(commands.Cog):
 
         return await ctx.send(f'O usuário `{member}` não foi banido.')   
 
-    @commands.command()
+    @commands.command(aliases=['silenciar', 'mutar'])
     @commands.has_permissions(manage_messages=True)
-    async def mute(self, ctx, member : discord.Member = None, reason = '_algum motivo_'):
+    async def mute(self, ctx, member : discord.Member = None, duration : int = None, *, reason = '_algum motivo..._',):
         if member == None:
-            return await ctx.send('Sintaxe: `mute @Usuário`')
+            return await ctx.send('Sintaxe: `mute <@usuário> <tempo (deixe 0 para eterno)> <razão>`')
         for role in member.roles:
             if role.name == 'Silenciado':
                 return await ctx.send(f'{member.mention} já está silenciado.')
         roles = []
         for role in ctx.guild.roles:
             roles.append(role.name)
-            if role.name == 'Silenciado':
-                muteRole = role
+            if role.name == "Silenciado":
                 try:
                     await member.add_roles(role)
-                    return await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {reason}")
+                    if duration == 0:
+                        duration = None
+                    if duration is not None:
+                        await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {duration} segundos, devido a {reason}")
+                        await sleep(duration)
+                        await member.remove_roles(role)
+                        return await ctx.send(f'{member.mention} pode falar novamente.')
+                    elif duration is None:
+                        return await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {reason}")
                 except:
                     return await ctx.send('Não fui capaz de silenciar o usuário.')
         if not "Silenciado" in roles:
             overwrite = discord.PermissionOverwrite(send_messages=False)
             newRole = await ctx.guild.create_role(name="Silenciado")
-
             for channel in ctx.guild.text_channels:
                 await channel.set_permissions(newRole, overwrite=overwrite)
-
             try:
                 await member.add_roles(newRole)
-                return await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {reason}")
+                if duration is not None:
+                    await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {duration} segundos, devido a {reason}")
+                    await sleep(duration)
+                    await member.remove_roles(role)
+                    return await ctx.send(f'{member.mention} pode falar novamente.')
+                if duration is None:
+                    return await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {reason}")
             except:
                 return await ctx.send('Não fui capaz de silenciar o usuário.')
-
-    @commands.command()
+            
+    @commands.command(aliases=['desmutar'])
     @commands.has_permissions(manage_messages=True)
     async def unmute(self, ctx, member : discord.Member = None):
         if member == None:

@@ -3,4 +3,4 @@ media
 .env
 .vs
 out
-modules/__pycache__
+__pycache__

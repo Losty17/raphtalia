@@ -4,6 +4,7 @@ from random import choice
 from os import getenv, path
 from dotenv import load_dotenv
 from time import sleep
+import utils.embed as e
 
 try:
     from modules import *
@@ -36,25 +37,7 @@ bot = commands.Bot(command_prefix=prefixxx,help_command=None,case_insensitive=Tr
 async def on_member_join(member):
     if member.guild.id != 592178925040435213:
         return
-    welcomeembed = discord.Embed(
-        title='Tragam as bebidas!', 
-        description=f'{member.mention} acabou de chegar!', 
-        color=COR)
-    welcomeembed.add_field(
-        name="<:raphNhom:674648257321893940> Precisa de ajuda?", 
-        value='Use o comando /ajuda para acessar meu painel de ajuda!', 
-        inline=True)
-    welcomeembed.add_field(
-        name="<:raphOh:674648256608731176> Siga meu criador nas redes sociais!", 
-        value=f'Use o comando `{prefixxx}author` para receber um link direto.', 
-        inline=True)
-    welcomeembed.add_field(
-        name="<:raphPat:674648256529170438> Quer divulgar meu servidor?", 
-        value=f'Digite discord para receber o link de convite para meu servidor!', 
-        inline=True)
-    welcomeembed.set_image(url='https://66.media.tumblr.com/d42fbc38b77d5e93f0dabd666d6fe5aa/tumblr_plyo8ka1yZ1y5sd79o3_500.png')
-    welcomeembed.set_author(name=f'{bot.user}', icon_url=bot.user.avatar_url)
-    #welcomeembed.set_footer(text=f'A {member.guild.name} agora possui {member.guild.size}')
+    welcomeembed = e.embedwelcome(member, bot, prefixxx)
     await bot.get_channel(592179994193559573).send(member.mention, embed=welcomeembed)
 
 @bot.command()
@@ -66,6 +49,11 @@ async def modules(ctx):
 @bot.command(aliases=['prefixo'])
 async def prefix(ctx):
     await ctx.send(f'O prefixo deste servidor é `{prefixxx}`.\nUse `{prefixxx}help` para obter ajuda.')
+    
+@bot.command(aliases=['help'])
+async def ajuda(ctx):
+    ajuda = e.embedajuda(ctx.author.mention)
+    await ctx.send(ctx.author.mention, embed = ajuda)
 
 @tasks.loop(seconds=120)
 async def change_presence_task():
@@ -119,3 +107,4 @@ if __name__ == "__main__":
         bot.run(getenv('BOT_TOKEN'))
     except KeyError:
         print('Váriavel de ambiente não encontrada.')
+    
