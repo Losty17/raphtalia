@@ -2,8 +2,7 @@ import discord
 import time
 
 from discord.ext import commands
-from random import choice
-from random import randint
+from random import choice, randint
 
 def is_empty(anything):
     if anything:
@@ -16,7 +15,7 @@ COR = 0xF26DDC
 class Text(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+    
     @commands.command(pass_context=True)
     async def ping(self, ctx):
         mesgedit = await ctx.channel.send('Ping?')
@@ -51,7 +50,7 @@ class Text(commands.Cog):
         else:
             return
 
-    @commands.command(aliases=['choice'])
+    @commands.command(aliases=['choice', 'chose', 'pick', 'choose'])
     async def escolha(self, ctx, *args):
         if is_empty(args):
             await ctx.channel.send(f'{ctx.author.mention} Quais eram as opções mesmo? ;-;')
@@ -104,6 +103,7 @@ class Text(commands.Cog):
     @commands.command()
     async def lal(self, ctx):
         await ctx.send('LAL')
+
 
 def setup(bot):
     bot.add_cog(Text(bot))

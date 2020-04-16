@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&family=Raleway:wght@800&display=swap');
+/* ELEMENTS */
+html{
+    margin: 0; padding: 0;
+    overflow: hidden;
+}
+h1{
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+}
+a, a:hover, a:visited{
+    color: white;
+    text-decoration: none;
+    cursor: default;
+}
+
+/* CLASS */
+.header-site {
+    width: 100vw;
+    height: 100vh;
+    margin: 0; padding: 0;
+    color: #fff;
+    height: 100vh;
+    background: url('../resources/backdrop.jpg') rgb(60, 60, 60);
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: multiply;
+    margin-bottom: 30px;
+}
+.header-site h1{
+    margin: 6.7vw;
+    margin-top: 150px; margin-bottom: 30px;
+    font-size: 5vw;
+    text-shadow: 2px 0px 4px rgba(0, 0, 0, 0.6);
+    display: block;
+    width: 30vw;
+}
+.header-site .sub{
+    float: right;
+}
+#raphtalia-cover{
+    height: 52vw;
+    display: inline-block;
+}
+.header-site p{
+    text-align: justify;
+    margin-right: 100px;
+    width: 27.5vw;
+    font-size: 1.4vw;
+    font-family: 'Raleway', sans-serif;
+}
+
+h1::after{
+    content:"";
+    width: 70%;
+    border: 1px solid white;
+    display: block;
+    margin: 10px auto;
+}
+blockquote{
+    border-left: none;
+    margin: 0; padding: 0;
+}
+.btn-primary{
+    transition: .2s;
+    font-family: 'Raleway', sans-serif;
+}
+.btn-primary, .btn-primary:visited, .btn-primary:focus{
+    width: 9vw;
+    background-color: rgb(60, 60, 60);
+    border-color: rgb(40, 40, 40);
+}
+.btn-primary:hover{
+    background-color: #7289da;
+    border-color: #7289da;
+    cursor: pointer;
+}
+.idk{
+    margin: 0;
+    padding: 0;
+}
+#p1{
+    margin-left: 8.3vw;
+}
+.btn{
+    font-size: 1.1vw;
+    margin: 0;
+}
+#buttons{
+    float: left; 
+    margin-left: 8.5vw;
+}
+#hover{
+    color: orange;
+    transition: .3s;
+    text-decoration: none;
+}
+#hover:hover{
+    color: plum;
+    text-decoration: none;
+    cursor: pointer;
+}
+#hover:visited{
+    text-decoration: none;
+}
+b{
+    color: orange;
+    letter-spacing: 1px;
+}

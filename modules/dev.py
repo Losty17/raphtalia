@@ -1,6 +1,7 @@
 import discord, os, ast, asyncio
 from dotenv import load_dotenv
 from discord.ext import commands
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 load_dotenv()
 OWNER = int(os.getenv('BOT_OWNER'))

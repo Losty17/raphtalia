@@ -9,7 +9,7 @@ class Nsfw(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=['pezinho', 'pé', 'pe'])
+    @commands.command(aliases=['pezinho', 'pé', 'pe', 'foot'])
     @commands.is_nsfw()
     async def feet(self, ctx):
         pepe = choice(('feet', 'erofeet'))

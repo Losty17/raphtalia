@@ -1,7 +1,8 @@
-import discord, time, random, os
+import discord, time, random, os, asyncio
 from nekos import textcat, cat
 from discord.ext import commands
 from utils.embed import neko_img_text
+from utils.imageman1 import image1test
 
 COR = 0xF26DDC
 
@@ -117,7 +118,16 @@ class Images(commands.Cog):
 
     @commands.command(aliases=['pic', 'foto', 'random'])
     async def randompic(self, ctx):
-        return await ctx.send(embed=neko_img_text(random.choice(('lizard', 'fox_girl', 'gasm', 'kemonomimi'))))
+        return await ctx.send(embed=neko_img_text(random.choice(('fox_girl', 'gasm', 'kemonomimi'))))
+
+    @commands.command()
+    async def imagemcagada(self, ctx, image, *, text : str = 'Sua mãe aquela puta'):
+        img = image1test(f'{image}', f'{text}')
+        file = discord.File('./media/img.png', filename='yeaforsure.png')
+        await ctx.send(file=file)
+        await ctx.message.delete()
+        await asyncio.sleep(5)
+        return os.remove('./media/img.png')
 
 def setup(bot):
     bot.add_cog(Images(bot))

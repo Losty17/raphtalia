@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt">
+    <head>
+<!--
+
+        ______            _     _        _ _       
+        | ___ \          | |   | |      | (_)      
+        | |_/ /__ _ _ __ | |__ | |_ __ _| |_  __ _ 
+        |    // _` | '_ \| '_ \| __/ _` | | |/ _` |
+        | |\ \ (_| | |_) | | | | || (_| | | | (_| |
+        \_| \_\__,_| .__/|_| |_|\__\__,_|_|_|\__,_|
+                   | |                             
+                   |_|         
+
+            Copyright © 2020 raphtalia.kody.mobi
+                    All rights reserved.
+
+-->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-U-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>Raphtalia - Commands</title>
+        <link rel="shortcut icon" type="image/x-icon" href="resources/raphtalia.ico">
+
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.css" rel="stylesheet">
+
+        <!-- Style -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Raleway&family=Raleway:wght@800&display=swap');
+            body{
+                background: url('resources/backdrop.jpg'), rgb(62,62,62);
+                background-blend-mode: multiply;
+                background-attachment: fixed;
+            }
+            .container{
+                max-width: 60vw;
+                background:#4b4b4bc2;
+                color: white;
+                height: auto;
+                text-align: center;
+                border: 2px solid rgba(80,80,80);
+                border-top: none;
+                border-bottom: none;
+                box-shadow: 10px 0 100px rgb(0,0,0);
+            }
+            .col-md-4{
+                margin: 0; padding: 0;
+                border-bottom: 1px solid rgba(80,80,80);
+                height: 7vh;
+                font-size: 14px;
+                font-family: 'Raleway', sans-serif;
+                display: block;
+                margin-top: 25px;
+            }
+            .title{
+                font-size: 20px;
+                font-family: 'Raleway', sans-serif;
+                font-weight: 800;
+            }
+            em{
+                font-family: monospace;
+            }
+            lower {
+                font-size: 9px;
+                color: #e3e3e3;
+            }
+            .subtitle{
+
+                background-color: rgb(40,40,40);
+                font-size: 18px;
+                font-family: 'Raleway', sans-serif;
+                font-weight: 800;
+                padding: 15px;
+                border-bottom: 1px solid rgba(80,80,80);
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+            .subtitle::before, .subtitle::after{
+                content: "";
+                width: 100px;
+                border: 1px solid white;
+                display: inline-block;
+                margin: 5px 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 title">Comando</div>
+                <div class="col-md-4 title">Descrição</div>
+                <div class="col-md-4 title">Aliases</div>
+            </div>
+            <!-- 1st Section -->
+            <div class="row subtitle">Admin</div>
+            <div class="row">
+                <div class="col-md-4">limpar <em>&lt;quantidade&gt;</em></div>
+                <div class="col-md-4">Limpa as mensagens do chat <br><lower>(limitado a mensagens enviadas há 14 dias)</lower></div>
+                <div class="col-md-4">clean, clear</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">expulsar <em>&lt;usuário&gt;</em> <em>&lt;motivo&gt;</em></div>
+                <div class="col-md-4">Expulsa um usuário do servidor</div>
+                <div class="col-md-4">kick</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">banir <em>&lt;usuário&gt;</em> <em>&lt;motivo&gt;</em></div>
+                <div class="col-md-4">Bane um usuário do servidor</div>
+                <div class="col-md-4">ban</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">perdoar <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Perdoa um usuário, permitindo que volte ao servidor</div>
+                <div class="col-md-4">pardon, unban</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">silenciar <em>&lt;usuário&gt;</em> <em>&lt;tempo&gt;</em> <em>&lt;motivo&gt;</em></div>
+                <div class="col-md-4">Silencia um usuário por um determinado tempo.</div>
+                <div class="col-md-4">mute</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">desmutar <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Desmuta um usuário</div>
+                <div class="col-md-4">unmute</div>
+            </div>
+            
+            <!-- 2nd Section -->
+            <div class="row subtitle">Imagem</div>
+            <div class="row">
+                <div class="col-md-4">gato</div>
+                <div class="col-md-4">Envia uma imagem aleatória de um gato</div>
+                <div class="col-md-4">cat</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">ganso</div>
+                <div class="col-md-4">Envia uma imagem aleatória de um ganso</div>
+                <div class="col-md-4">goose</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">cachorro</div>
+                <div class="col-md-4">Envia uma imagem aleatória de um cachorro</div>
+                <div class="col-md-4">dog</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">lagarto</div>
+                <div class="col-md-4">Envia uma imagem aleatória de um lagarto</div>
+                <div class="col-md-4">lagartixa, lizard</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">neko</div>
+                <div class="col-md-4">Envia um gif aleatório de um neko</div>
+                <div class="col-md-4">-</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">avatar <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Envia o avatar de um usuário</div>
+                <div class="col-md-4">-</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">tapa <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Dê um tapa em alguém</div>
+                <div class="col-md-4">slap</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">carinho <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Faça carinho em alguém</div>
+                <div class="col-md-4">cuddle</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">acariciar <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Acaricie alguém</div>
+                <div class="col-md-4">pat</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">cutucar <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Cutuque alguém</div>
+                <div class="col-md-4">poke</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">beijar <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Beije alguém</div>
+                <div class="col-md-4">kiss</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">alimentar  <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Alimente alguém</div>
+                <div class="col-md-4">feed</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">cocegas <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Faça cócegas em alguém</div>
+                <div class="col-md-4">tickle</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">baka <em>&lt;usuário&gt;</em></div>
+                <div class="col-md-4">Chame alguém de idiota</div>
+                <div class="col-md-4">-</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">smug</div>
+                <div class="col-md-4">smug</div>
+                <div class="col-md-4">smug</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">meme</div>
+                <div class="col-md-4">Envia um meme aleatório</div>
+                <div class="col-md-4">jojomeme</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">jojo </div>
+                <div class="col-md-4">Envia uma imagem aleatória de jojo</div>
+                <div class="col-md-4">jjba</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">imgur <em>&lt;termo&gt;</em></div>
+                <div class="col-md-4">Faz uma pesquisa no Imgur</div>
+                <div class="col-md-4">-</div>
+            </div>
+            
+            <!-- 3rd Section -->
+            <div class="row subtitle">Texto</div>
+            <div class="row">
+                <div class="col-md-4">ping</div>
+                <div class="col-md-4">Envia o ping do bot</div>
+                <div class="col-md-4">-</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">moeda</div>
+                <div class="col-md-4">Envia cara ou coroa no chat</div>
+                <div class="col-md-4">coin, flip</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">diga</div>
+                <div class="col-md-4">Envia a frase informada no chat</div>
+                <div class="col-md-4">say</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">inverter</div>
+                <div class="col-md-4">Inverte a frase informada</div>
+                <div class="col-md-4">invert</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">escolha <em>&lt;opções&gt;</em></div>
+                <div class="col-md-4">Escolhe dentre as opções listadas<br><lower>(separadas por espaços)</lower></div>
+                <div class="col-md-4">choose, pick</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">role <em>&lt;dado&gt;</em></div>
+                <div class="col-md-4">Rola um dado<br><lower>(ex: role 2d20 / role 20)</lower></div>
+                <div class="col-md-4">roll, dice</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">lal</div>
+                <div class="col-md-4">lal</div>
+                <div class="col-md-4">lal</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">filo <em>&lt;pergunta&gt;</em></div>
+                <div class="col-md-4">Faça uma pergunta e a Filo-chan responderá</div>
+                <div class="col-md-4">8ball</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">proibir</div>
+                <div class="col-md-4">Todo dia uma proibição do governo!<br><lower>(Você pode escolher a proibição ao adicionar argumentos)</lower></div>
+                <div class="col-md-4">-</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">ajuda</div>
+                <div class="col-md-4">Envia o painel de ajuda do bot</div>
+                <div class="col-md-4">help</div>
+            </div>
+
+            <!-- 3rd Section -->
+            <div class="row"><p class="subtitle">NSFW</p></div>
+            <div class="row">
+                <div class="col-md-4">pezinho</div>
+                <div class="col-md-4">Envia uma imagem de pezinho</div>
+                <div class="col-md-4">pe, foot, feet</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">lewd</div>
+                <div class="col-md-4">Envia um "soft-porn"</div>
+                <div class="col-md-4">ero, softporn</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">nsfw</div>
+                <div class="col-md-4">Envia uma imagem nsfw</div>
+                <div class="col-md-4">hentai, porn</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">hgif</div>
+                <div class="col-md-4">Envia um gif de hentai</div>
+                <div class="col-md-4">hentaigif</div>
+            </div>
+        </div>
+    </body>
+</html>
