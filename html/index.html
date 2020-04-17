@@ -33,9 +33,14 @@
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     </head>
     <body>
+        <script>
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+                location.href = '/mobile';
+            }
+        </script>
         <!-- Header -->
         <section class="header-site">
-            <img src="resources/raphtalia.png" id="raphtalia-cover" data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000">
+            <img src="resources/raphtalia.png" id="raphtalia-cover" data-aos="fade-left" data-aos-delay="600" data-aos-duration="1000">
             <div class="col-md-6 text-center sub">
                 <blockquote>
                     <div class="d-none d-lg-block">
@@ -48,7 +53,7 @@
                         <div id="buttons">
                             <a href="https://discordapp.com/oauth2/authorize?client_id=675010654939381785&scope=bot&permissions=8" class="btn btn-primary" target="_blank"><i class="glyphicon glyphicon-plus"></i> Convidar</a>
                             <a href="https://top.gg/bot/675010654939381785" class="btn btn-primary" target="_blank" ><i class="glyphicon glyphicon-star"></i> Votar</a>
-                            <a href="commands.html" class="btn btn-primary" target="_blank"><i class="glyphicon glyphicon-console"></i> Comandos</a>
+                            <a href="commands" class="btn btn-primary"><i class="glyphicon glyphicon-console"></i> Comandos</a>
                         </div>
                     </div>
                 </blockquote>
