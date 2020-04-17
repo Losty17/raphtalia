@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&family=Raleway:wght@800&display=swap');
+body{
+    background: url('../resources/backdrop.jpg'), rgb(62,62,62);
+    background-blend-mode: multiply;
+    background-attachment: fixed;
+    background-size:cover;
+}
+.container{
+    max-width: 60vw;
+    background:#4b4b4bc2;
+    color: white;
+    height: auto;
+    text-align: center;
+    border: 2px solid rgba(80,80,80);
+    border-top: none;
+    border-bottom: none;
+    box-shadow: 10px 0 100px rgb(0,0,0);
+}
+.col-md-4{
+    margin: 0; padding: 0;
+    border-bottom: 1px solid rgba(80,80,80);
+    height: 7vh;
+    font-size: 14px;
+    font-family: 'Raleway', sans-serif;
+    display: block;
+    margin-top: 25px;
+}
+.title{
+    font-size: 3.1vh;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+}
+em{
+    font-family: monospace;
+}
+lower {
+    font-size: 9px;
+    color: #e3e3e3;
+}
+.subtitle{
+
+    background-color: rgb(40,40,40);
+    font-size: 3vh;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    padding: 15px;
+    border-bottom: 1px solid rgba(80,80,80);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.subtitle::before, .subtitle::after{
+    content: "";
+    width: 7vw;
+    border: 1px solid white;
+    display: inline-block;
+    margin: 5px 10px;
+}

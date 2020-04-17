@@ -104,7 +104,6 @@ class Text(commands.Cog):
     async def lal(self, ctx):
         await ctx.send('LAL')
 
-
 def setup(bot):
     bot.add_cog(Text(bot))
 
