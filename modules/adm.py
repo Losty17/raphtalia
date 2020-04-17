@@ -49,38 +49,42 @@ class Cog(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     async def mute(self, ctx, member : discord.Member = None, duration : int = None, *, reason = '_algum motivo..._',):
         if member == None:
-            return await ctx.send('Sintaxe: `mute <@usuário> <tempo (deixe 0 para eterno)> <razão>`')
-        for role in member.roles:
-            if role.name == 'Silenciado':
-                return await ctx.send(f'{member.mention} já está silenciado.')
-        roles = []
-        for role in ctx.guild.roles:
-            roles.append(role.name)
-            if role.name == "Silenciado":
-                try:
-                    await member.add_roles(role)
-                    if duration == 0:
-                        duration = None
-                    if duration is not None:
-                        await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {duration} segundos, devido a {reason}")
-                        await sleep(duration)
-                        await member.remove_roles(role)
-                        return await ctx.send(f'{member.mention} pode falar novamente.')
-                    elif duration is None:
-                        return await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {reason}")
-                except:
-                    return await ctx.send('Não fui capaz de silenciar o usuário.')
-        if not "Silenciado" in roles:
-            overwrite = discord.PermissionOverwrite(send_messages=False)
-            newRole = await ctx.guild.create_role(name="Silenciado")
-            for channel in ctx.guild.text_channels:
-                await channel.set_permissions(newRole, overwrite=overwrite)
+            return await ctx.send('Sintaxe: `mute <@usuário> <tempo> <razão>`')
+        # Checks if the user has the silence role
+        if discord.utils.get(member.roles, name="Silenciado") is not None:
+            return await ctx.send(f'{member.mention} já está silenciado.')
+
+        # Find mute role
+        muteRole = discord.utils.get(ctx.guild.roles, name="Silenciado")
+
+        # if mute role exists in server, we add it to the member
+        if muteRole is not None:
             try:
-                await member.add_roles(newRole)
+                await member.add_roles(muteRole)
+                if duration == 0:
+                    duration = None
                 if duration is not None:
                     await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {duration} segundos, devido a {reason}")
                     await sleep(duration)
-                    await member.remove_roles(role)
+                    await member.remove_roles(muteRole)
+                    return await ctx.send(f'{member.mention} pode falar novamente.')
+                elif duration is None:
+                    return await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {reason}")
+            except:
+                return await ctx.send('Não fui capaz de silenciar o usuário.')
+        
+        # if mute role does not exist in guild we create one
+        else:
+            overwrite = discord.PermissionOverwrite(send_messages=False)
+            muteRole = await ctx.guild.create_role(name="Silenciado")
+            for channel in ctx.guild.text_channels:
+                await channel.set_permissions(muteRole, overwrite=overwrite)
+            try:    
+                await member.add_roles(muteRole)
+                if duration is not None:
+                    await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {duration} segundos, devido a {reason}")
+                    await sleep(duration)
+                    await member.remove_roles(muteRole)
                     return await ctx.send(f'{member.mention} pode falar novamente.')
                 if duration is None:
                     return await ctx.send(f"{ctx.author.mention} silenciou {member.mention} por {reason}")
@@ -93,15 +97,14 @@ class Cog(commands.Cog):
         if member == None:
             return await ctx.send('Sintaxe: `unmute @Usuário`')
         roles = []
-        for role in member.roles:
-            roles.append(role.name)
-            if role.name == 'Silenciado':
-                try:
-                    await member.remove_roles(role)
-                    return await ctx.send(f'{member.mention} agora pode falar.')
-                except:
-                    return await ctx.send('Não fui capaz de remover o silenciamento do usuário')
-        if not 'Silenciado' in roles:
+        muteRole = discord.utils.get(member.roles, name="Silenciado")
+        if muteRole is not None:
+            try:
+                await member.remove_roles(muteRole)
+                return await ctx.send(f'{member.mention} agora pode falar.')
+            except:
+                return await ctx.send('Não fui capaz de remover o silenciamento do usuário')
+        else:
             return await ctx.send(f'{member.mention} não foi silenciado.')
 
 def setup(bot):

@@ -140,10 +140,19 @@ class DevOnly(commands.Cog):
     
     @commands.command()
     async def teste3(self, ctx):
-        asdas = ctx.author.roles
-        print(asdas)
-        if "teste" in ctx.author.roles:
-            print('teste')
+        muteRole = discord.utils.get(ctx.guild.roles, name="Roberto")
+        if muteRole is not None:
+            print(muteRole)
+            print('Penis')
+
+    @commands.command()
+    async def mutetest(self, ctx):
+        muteRole = discord.utils.get(ctx.guild.roles, name="Silenciado")
+        
+        if muteRole is not None:
+            await ctx.author.add_roles(muteRole)
+        else:
+            await ctx.send('None')
 
 def setup(bot):
     bot.add_cog(DevOnly(bot))
