@@ -3,12 +3,39 @@ from nekos import textcat, cat
 from discord.ext import commands
 from utils.embed import neko_img_text
 from utils.imageman1 import image1test
+from pymongo import MongoClient
+from imgurpython import ImgurClient
+from dotenv import load_dotenv
+
+load_dotenv()
+
+imgurclient = ImgurClient(os.getenv('IMGUR_TOKEN'), os.getenv('IMGUR_SECRET'))
+
+##
+
+db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
+db = db_client.get_database('guild_db')
+collection = db.get_collection('guild_collection')
+
+##
 
 COR = 0xF26DDC
+
+def is_empty(anything):
+    if anything:
+        return False
+    else:
+        return True
 
 class Images(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    async def cog_check(self, ctx):
+        col = collection.find_one({'_id': ctx.guild.id})
+        if col['images'] == False:
+            raise commands.DisabledCommand
+        return col['images'] == True
 
     @commands.command(pass_context=True)
     async def avatar(self, ctx, member: discord.Member = None):
@@ -128,6 +155,37 @@ class Images(commands.Cog):
         await ctx.message.delete()
         await asyncio.sleep(5)
         return os.remove('./media/img.png')
+
+    @commands.command()
+    async def meme(self, ctx):
+        items = imgurclient.get_album_images('Kz30J')
+        img = random.choice(items).link
+        await ctx.send(img)
+
+    @commands.command(aliases=['jjba'])
+    async def jojo(self, ctx):
+        rand = random.randint(0, 113)
+        album = imgurclient.get_album_images('FAmyQ')
+        img = album[rand].link
+        await ctx.send(img)
+
+    @commands.command(aliases=['jojoshitpost','jjbameme'])
+    async def jojomeme(self, ctx):
+        rand = random.randint(0, 59)  # 60 results generated per page
+        items = imgurclient.subreddit_gallery(subreddit='ShitPostCrusaders', sort='time', window='week', page=0)
+        img = items[rand].link
+        await ctx.send(img)
+
+    @commands.command()
+    async def imgur(self, ctx, *args):
+        rand = random.randint(0, 59)  # 60 results generated per page
+        if is_empty(args):
+            items = imgurclient.gallery(section='hot', sort='viral', page=0, window='day', show_viral=True)
+        else:
+            query = ' '.join(args)
+            items = imgurclient.gallery_search(q=query, advanced=None, sort='viral', window='all', page=0)
+        img = items[rand].link
+        await ctx.send(img)
 
 def setup(bot):
     bot.add_cog(Images(bot))

@@ -4,6 +4,7 @@ from random import choice
 from os import getenv, path
 from dotenv import load_dotenv
 from time import sleep
+from pymongo import MongoClient
 
 try:
     from modules import *
@@ -16,11 +17,11 @@ extensions = [
     'modules.webhook',
     'modules.error_handler',
     'modules.message_events',
-    'modules.imgur',
     'modules.adm',
     'modules.images',
     'modules.nsfw',
-    'modules.music'
+    'modules.music',
+    'modules.tests'
 ]
 
 load_dotenv()
@@ -29,6 +30,22 @@ COR = 0xF26DDC
 
 global prefixxx
 prefixxx = getenv('BOT_PREFIX')
+
+##
+
+db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
+db = db_client.get_database('guild_db')
+collection = db.get_collection('guild_collection')
+
+##
+modules = [
+    'text',
+    'adm',
+    'images',
+    'music',
+    'nsfw'
+]
+m_string = ', '.join(modules)
 
 bot = commands.Bot(command_prefix=prefixxx,help_command=None,case_insensitive=True,owner_id=int(getenv('BOT_OWNER')))
 
@@ -42,9 +59,31 @@ async def on_member_join(member):
         if r.name == 'Newbie':
             return await member.add_roles(r)
 
-@bot.command()
+@bot.command(name='enable',aliases=['ativar'])
+@commands.has_permissions(administrator=True)
+async def enable_group(ctx, module = None):
+    if module == None or not module in modules:
+        return await ctx.send(f'Módulos: `{m_string}`.', delete_after=60)
+    collection.update_one(
+        {'_id': ctx.guild.id},
+        {'$set': {module: True}}
+    )
+    return await ctx.send(f'Módulo `{module}` ativado com sucesso.')
+
+@bot.command(name='disable',aliases=['desativar'])
+@commands.has_permissions(administrator=True)
+async def disable_group(ctx, module = None):
+    if module is None:
+        return await ctx.send(f'Módulos: `{m_string}`.', delete_after=60)
+    collection.update_one(
+        {'_id': ctx.guild.id},
+        {'$set': {module: False}}
+    )
+    return await ctx.send(f'Módulo `{module}` desativado com sucesso.')
+
+@bot.command(name='extensions')
 @commands.is_owner()
-async def modules(ctx):
+async def list_extensions(ctx):
     modules = ', '.join(extensions)
     await ctx.send(f'Os modulos são: `{modules}`')
 

@@ -11,7 +11,7 @@ class Error(commands.Cog):
         if isinstance(error, commands.NoPrivateMessage):
             return await ctx.send('Desculpe, mas é necessário estar em um servidor para utilizar meus comandos.')
         elif isinstance(error, commands.DisabledCommand):
-            return await ctx.send('Este comando está desabilitado temporariamente.')
+            return await ctx.send('Este comando está desabilitado neste servidor.')
         elif isinstance(error, commands.errors.NSFWChannelRequired):
             return await ctx.send(f'Você so pode usar este comando em um canal NSFW!')
         elif isinstance(error, commands.CheckFailure):

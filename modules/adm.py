@@ -1,10 +1,25 @@
 import discord
 from discord.ext import commands
 from asyncio import sleep
+from pymongo import MongoClient
+
+##
+
+db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
+db = db_client.get_database('guild_db')
+collection = db.get_collection('guild_collection')
+
+##
 
 class Cog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    async def cog_check(self, ctx):
+        col = collection.find_one({'_id': ctx.guild.id})
+        if col['adm'] == False:
+            raise commands.DisabledCommand
+        return col['adm'] == True
 
     @commands.command(aliases=['clean', 'limpar'])
     @commands.has_permissions(manage_messages=True)

@@ -2,9 +2,19 @@ import discord, os, ast, asyncio
 from dotenv import load_dotenv
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont, ImageOps
+from pymongo import MongoClient
 
 load_dotenv()
 OWNER = int(os.getenv('BOT_OWNER'))
+
+##
+
+db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
+db = db_client.get_database('guild_db')
+collection = db.get_collection('guild_collection')
+avatar_collection = db.get_collection('avatar_collection')
+
+##
 
 def insert_returns(body):
     # insert return stmt if the last expression is a expression statement
@@ -154,9 +164,36 @@ class DevOnly(commands.Cog):
         else:
             await ctx.send('None')
 
+    @commands.command()
+    async def insertdb(self, ctx):
+        try:
+            collection.insert_one(
+                {
+                    '_id'    : ctx.guild.id,
+                    'name'   : ctx.guild.name,
+                    'text'   : True,
+                    'adm'    : True,
+                    'images' : True,
+                    'music'  : True,
+                    'nsfw'   : True,
+                    'welcome': False
+                }
+            )
+        except:
+            return await ctx.send('DOC já existe')
+        await ctx.send(f'DB para `{ctx.guild.id} | {ctx.guild.name}` Criado com sucesso')
+
+    @commands.command()
+    async def getdb(self, ctx):
+        return await ctx.send(f"`{collection.find_one({'_id': ctx.guild.id})}`")
+
+    @commands.command()
+    async def testdb(self, ctx):
+        if collection.find_one({'_id': ctx.guild.id})['text'] == True:
+            await ctx.send('pneis')
+
 def setup(bot):
     bot.add_cog(DevOnly(bot))
 
 if __name__ == "__main__":
-    print(os.getenv('BOT_OWNER'))
-    print(int(OWNER))
+    db_client.test
