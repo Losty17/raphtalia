@@ -6,11 +6,12 @@
 #   Be careful!                                 #
 #                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # 
-import discord, os
+import discord, os, logging
 from discord.ext import commands
 from utils.embed import *
 from pymongo import MongoClient
 from random import choice
+from raphtalia import logger
 
 class Core(commands.Cog):
     def __init__(self, bot):
@@ -117,11 +118,11 @@ class Core(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'\nOlá mundo! Eu sou {self.bot.user}')
+        logger.info(f'Olá mundo! Eu sou {self.bot.user}')
         try:
             await self.bot.change_presence(activity=discord.Game('Visite meu website! raphtalia.kody.mobi'), status=discord.Status.idle)
         except:
-            print('Não foi possível carregar as tarefas de segundo plano')
+            logger.WARNING('Não foi possível carregar as tarefas de segundo plano')
 
 def setup(bot):
     bot.add_cog(Core(bot))
