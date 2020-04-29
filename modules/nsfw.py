@@ -2,12 +2,22 @@ import discord
 from discord.ext import commands
 from utils.embed import neko_img_text
 from random import choice
-
-COR = 0xF26DDC
+from pymongo import MongoClient
 
 class Nsfw(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+        self.db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
+        self.db = self.db_client.get_database('guild_db')
+        self.collection = self.db.get_collection('guild_collection')
+
+    async def cog_check(self, ctx):
+        if ctx.guild: return True
+        col = self.collection.find_one({'_id': ctx.guild.id})
+        if col['nsfw'] == False:
+            raise commands.DisabledCommand
+        return col['nsfw'] == True
 
     @commands.command(aliases=['pezinho', 'pé', 'pe', 'foot'])
     @commands.is_nsfw()

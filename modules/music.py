@@ -1,3 +1,4 @@
+# This is not mine, just stole it from the web
 """
 Please understand Music bots are complex, and that even this basic example can be daunting to a beginner.
 
@@ -28,6 +29,15 @@ import traceback
 from async_timeout import timeout
 from functools import partial
 from youtube_dl import YoutubeDL
+from pymongo import MongoClient
+
+##
+
+db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
+db = db_client.get_database('guild_db')
+collection = db.get_collection('guild_collection')
+
+##
 
 
 ytdlopts = {
@@ -188,12 +198,18 @@ class MusicPlayer:
 
 class Music(commands.Cog):
     """Music related commands."""
-
     __slots__ = ('bot', 'players')
 
     def __init__(self, bot):
         self.bot = bot
         self.players = {}
+
+    async def cog_check(self, ctx):
+        if ctx.guild: return False
+        col = collection.find_one({'_id': ctx.guild.id})
+        if col['music'] == False:
+            raise commands.DisabledCommand
+        return col['music'] == True
 
     async def cleanup(self, guild):
         try:
