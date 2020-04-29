@@ -1,30 +1,23 @@
-import discord, time
+import discord, time, os, asyncio
 from discord.ext import commands
 from random import choice, randint
 from pymongo import MongoClient
 
-##
-
-db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
-db = db_client.get_database('guild_db')
-collection = db.get_collection('guild_collection')
-
-##
-
-def is_empty(anything):
-    if anything:
-        return False
-    else:
-        return True
-
-COR = 0xF26DDC
-
 class Text(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.words_file = open(os.path.join('media', 'words.txt'), "r")
+        self.words = self.words_file.readlines()
+
+        self.words_file.close()
+
+        self.db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
+        self.db = self.db_client.get_database('guild_db')
+        self.collection = self.db.get_collection('guild_collection')
     
     async def cog_check(self, ctx):
-        col = collection.find_one({'_id': ctx.guild.id})
+        if ctx.guild: return True
+        col = self.collection.find_one({'_id': ctx.guild.id})
         if col['text'] == False:
             raise commands.DisabledCommand
         return col['text'] == True
@@ -44,16 +37,13 @@ class Text(commands.Cog):
         await message.channel.send(f'{message.author.mention} {pau}')
 
     @commands.command(pass_context = True, aliases=['say'])
-    async def diga(self, ctx, *args):
-        if is_empty(args):
-            await ctx.message.channel.send(f'{ctx.author.mention} o que eu deveria dizer? -.-')
+    async def diga(self, ctx, *, args : str = None):
+        if args == None: return
+        if args.lower() == 'pindamonhangaba':
+            await ctx.channel.send('Achou que eu ia falar? bobinho')
         else:
-            mesg = ' '.join(args)
-            if mesg.lower() == 'pindamonhangaba':
-                await ctx.message.channel.send('Achou que eu ia falar? bobinho')
-            else:
-                await ctx.message.delete()
-                await ctx.message.channel.send(mesg)
+            await ctx.message.delete()
+            return await ctx.channel.send(args)
 
     @commands.command(aliases=['invert'])
     async def inverter(self, ctx, *, text: str = None):
@@ -65,10 +55,10 @@ class Text(commands.Cog):
 
     @commands.command(aliases=['choice', 'chose', 'pick', 'choose'])
     async def escolha(self, ctx, *args):
-        if is_empty(args):
-            await ctx.channel.send(f'{ctx.author.mention} Quais eram as opções mesmo? ;-;')
-        else:
+        if args:
             await ctx.channel.send(choice(args))
+        else:
+            await ctx.channel.send(f'{ctx.author.mention} Quais eram as opções mesmo? ;-;')
 
     @commands.command(aliases=['add'])
     async def some(self, ctx, left: int, right: int):
@@ -79,7 +69,7 @@ class Text(commands.Cog):
 
     @commands.command(aliases=['roll','dice','rolldice'])
     async def role(self, ctx, *args):
-        if is_empty(args):
+        if not args:
             return await ctx.send('Qual deveria ser o número para rolar?')
         roll = ''.join(args)
         
@@ -96,7 +86,7 @@ class Text(commands.Cog):
                     final_result = sum(nums_int)
                     partial = ' + '.join(nums_str)
                     await ctx.send('Rolando...')
-                    time.sleep(2)
+                    await asyncio.sleep(1)
                     await ctx.send(f'{ctx.author.mention}, `{partial}` = `{str(final_result)}` 🎲')
                 except:
                     await ctx.send('Não consegui efetuar a operação, tente novamente')
@@ -116,6 +106,50 @@ class Text(commands.Cog):
     @commands.command()
     async def lal(self, ctx):
         await ctx.send('LAL')
+
+    @commands.command(pass_context=True,aliases=['8ball'])
+    async def filo(self, ctx, question : str = None):
+        if not question: return
+        else: 
+            ans = [
+                'Sim',
+                'Não',
+                'Talvez',
+                'Não sei',
+                'Concordo',
+                'Com certeza',
+                'Obviamente não',
+                'Não posso negar',
+                'Não posso afirmar',
+                '(Censurado pelo governo)',
+                'Com toda certeza que sim',
+                'Para de encher o saco e vai capinar um lote, não tô aqui pra te responder'
+            ]
+            msg = choice(ans)
+        
+        # Finding the webhook
+        filo = discord.utils.get(await ctx.channel.webhooks(), name='Filo-chan')
+        if not filo:
+            with open(os.path.join("media", "filo.png"), 'rb') as avatar:
+                filo = await ctx.channel.create_webhook(name='Filo-chan',avatar=avatar.read())
+        
+        # Sending the message
+        return await filo.send(content=msg)
+
+    @commands.command()
+    async def proibir(self, ctx, *, proibicao : str = None):
+        # Setting the prohibition
+        if proibicao: msg = f'Hoje o governo proibiu {proibicao}'
+        else: msg = f'Hoje o governo proibiu {choice(self.words).lower()}'
+        
+        # Finding the webhook
+        proibiubot = discord.utils.get(await ctx.channel.webhooks(), name='ProibiuBOT')
+        if not proibiubot:
+            with open(os.path.join("media", "proibiu.jpg"), 'rb') as avatar:
+                proibiubot = await ctx.channel.create_webhook(name='ProibiuBOT',avatar=avatar.read())
+        
+        # Sending the message
+        return await proibiubot.send(content=msg)
 
 def setup(bot):
     bot.add_cog(Text(bot))

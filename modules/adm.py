@@ -1,22 +1,27 @@
+# # # # # # # # # # # # # # # # # # # # # # # # #
+#                                               #
+#   These are the admin commands for guilds.    #
+#   It may be enabled or disabled using         #
+#   Discord commands.                           #
+#                                               #
+# # # # # # # # # # # # # # # # # # # # # # # # # 
 import discord
 from discord.ext import commands
 from asyncio import sleep
 from pymongo import MongoClient
 
-##
-
-db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
-db = db_client.get_database('guild_db')
-collection = db.get_collection('guild_collection')
-
-##
-
 class Cog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
+        self.db = self.db_client.get_database('guild_db')
+        self.collection = self.db.get_collection('guild_collection')
 
+    # Checking for guilds, then checking if ADM 
+    # module is enabled on the guild
     async def cog_check(self, ctx):
-        col = collection.find_one({'_id': ctx.guild.id})
+        if ctx.guild is None: raise commands.NoPrivateMessage
+        col = self.collection.find_one({'_id': ctx.guild.id})
         if col['adm'] == False:
             raise commands.DisabledCommand
         return col['adm'] == True

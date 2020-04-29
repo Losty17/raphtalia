@@ -37,7 +37,7 @@ class DevOnly(commands.Cog):
 
     async def cog_check(self, ctx):
         if ctx.author.id != OWNER:
-            raise commands.CheckFailure
+            raise commands.NotOwner
         return ctx.author.id == OWNER
 
     @commands.command()

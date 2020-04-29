@@ -1,3 +1,4 @@
+# This is not mine, just stole it from the web
 """
 Please understand Music bots are complex, and that even this basic example can be daunting to a beginner.
 
@@ -204,6 +205,7 @@ class Music(commands.Cog):
         self.players = {}
 
     async def cog_check(self, ctx):
+        if ctx.guild: return False
         col = collection.find_one({'_id': ctx.guild.id})
         if col['music'] == False:
             raise commands.DisabledCommand
