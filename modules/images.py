@@ -8,6 +8,7 @@ from imgurpython import ImgurClient
 from dotenv import load_dotenv
 
 load_dotenv()
+COR = 0xF26DDC
 
 class Images(commands.Cog):
     def __init__(self, bot):
@@ -118,9 +119,9 @@ class Images(commands.Cog):
         if member is None:
             member = ctx.author
         elif member == self.bot.user:
-            embed = discord.Embed(colour=COR)
+            embed = discord.Embed(colour=self.COR, title="o///o")
             embed.set_image(url='https://i.pinimg.com/originals/50/03/9d/50039d415a087ca8c213eb1337c82ca5.jpg')
-            return await ctx.send(ctx.author.mention, embed=embed)
+            return await ctx.send(embed=embed)
         title=f'{ctx.author.name} beijou {member.name}'
         return await ctx.send(embed=neko_img_text('kiss', title, textcat()))
 

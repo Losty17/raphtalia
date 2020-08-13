@@ -11,7 +11,7 @@ from discord.ext import commands
 from utils.embed import *
 from pymongo import MongoClient
 from random import choice
-from raphtalia import logger
+#from raphtalia import logger
 
 class Core(commands.Cog):
     def __init__(self, bot):
@@ -88,8 +88,8 @@ class Core(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        _prefix = self.collection.find_one({'_id': message.guild.id})['prefix']
-        if '<@!675010654939381785>' in message.content and not message.content.startswith(_prefix):
+        # _prefix = self.collection.find_one({'_id': message.guild.id})['prefix']
+        if message.content.startswith('<@!701798980639785000>'):
             respostas = [
             'Fico pensando por que você está marcando um bot...',
             'Gostou do meu nome, é?',
@@ -118,11 +118,11 @@ class Core(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logger.info(f'Olá mundo! Eu sou {self.bot.user}')
+        print(f'Olá mundo! Eu sou {self.bot.user}')
         try:
             await self.bot.change_presence(activity=discord.Game('Visite meu website! raphtalia.kody.mobi'), status=discord.Status.idle)
         except:
-            logger.WARNING('Não foi possível carregar as tarefas de segundo plano')
+            print('Não foi possível carregar as tarefas de segundo plano')
 
 def setup(bot):
     bot.add_cog(Core(bot))

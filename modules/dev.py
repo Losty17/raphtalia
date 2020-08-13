@@ -171,6 +171,7 @@ class DevOnly(commands.Cog):
                 {
                     '_id'    : ctx.guild.id,
                     'name'   : ctx.guild.name,
+                    'prefix' : "r!",
                     'text'   : True,
                     'adm'    : True,
                     'images' : True,

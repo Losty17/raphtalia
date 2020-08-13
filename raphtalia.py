@@ -30,15 +30,15 @@ load_dotenv()
 TOKEN = getenv('BOT_TOKEN')
 
 # Init logger
-log_name = datetime.now().strftime('[%d %m %Y - %Hh%Mmin] Raphtalia.log')
-logging.basicConfig(
-        level=logging.INFO
-    )
-logger = logging.getLogger('discord')
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename=f'logs/{log_name}', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s | %(levelname)s: %(message)s', datefmt='[%H:%M:%S]'))
-logger.addHandler(handler)
+#log_name = datetime.now().strftime('[%d %m %Y - %Hh%Mmin] Raphtalia.log')
+#logging.basicConfig(
+#        level=logging.INFO
+#    )
+#logger = logging.getLogger('discord')
+#logger.setLevel(logging.DEBUG)
+#handler = logging.FileHandler(filename=f'logs/{log_name}', encoding='utf-8', mode='w')
+#handler.setFormatter(logging.Formatter('%(asctime)s | %(levelname)s: %(message)s', datefmt='[%H:%M:%S]'))
+#logger.addHandler(handler)
 
 # List of extensions to load
 extensions = [
@@ -54,7 +54,7 @@ extensions = [
 ]
 
 # Database connection
-db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/test?retryWrites=true&w=majority")
+db_client = MongoClient("mongodb+srv://Losty:%402Losty%40@raphtaliabot-nl6k6.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
 db = db_client.get_database('guild_db')
 collection = db.get_collection('guild_collection')
 
@@ -63,8 +63,11 @@ default_prefix = '.'
 async def determine_prefix(bot, message):
     guild = message.guild
     if guild:
-        prefix = collection.find_one({'_id': guild.id})['prefix']
-        return prefix
+        try:
+            prefix = collection.find_one({'_id': guild.id})['prefix']
+            return prefix
+        except:
+            return default_prefix
     else: return default_prefix
 
 # Bot creation
@@ -74,10 +77,10 @@ bot = commands.Bot(command_prefix=determine_prefix,help_command=None,case_insens
 def load_modules():
     for e in extensions:
         try:
-            logger.info(f"Carregando módulo: {e}...")
+            print(f"Carregando módulo: {e}...")
             bot.load_extension(e)
         except Exception:
-            logger.exception(f"Não foi possível carregar o módulo {e}", exc_info=True)
+            print(f"Não foi possível carregar o módulo {e}", exc_info=True)
 
 # Letta run the boat
 if __name__ == "__main__":
@@ -86,5 +89,5 @@ if __name__ == "__main__":
     try:
         bot.run(TOKEN)
     except KeyError:
-        logger.error('Váriavel de ambiente não encontrada.')
+        print('Váriavel de ambiente não encontrada.')
     
